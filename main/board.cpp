@@ -226,7 +226,7 @@ static void render_status(void) {
     s.setTextDatum(lgfx::middle_center);
     s.setTextColor(c888(p.accent));
     s.drawString(g_app.motorcycle ? "Bike" : "Car", 192, 20);
-    const char *wifi_label = g_app.wifi_mode == 0 ? "Board WiFi" : g_app.wifi_mode == 1 ? "Phone AP" : "Auto WiFi";
+    const char *wifi_label = g_app.wifi_mode == 0 ? "Board WiFi" : g_app.wifi_mode == 1 ? "Phone AP" : g_app.wifi_mode == 2 ? "Auto WiFi" : "Helper WiFi";
     s.drawString(wifi_label, 266, 20);
 
     s.fillSmoothRoundRect(12, 38, 296, 130, 18, c888(p.card));
@@ -244,14 +244,14 @@ static void render_status(void) {
             snprintf(l1, sizeof l1, "Enable phone hotspot");
             snprintf(l2, sizeof l2, "%s (2.4 GHz)", CONFIG_AAM_HOTSPOT_SSID);
         } else {
-            snprintf(l1, sizeof l1, "Join WiFi %s", CONFIG_AAM_AP_SSID);
-            snprintf(l2, sizeof l2, "%s", g_app.wifi_mode == 0 ? "Keep mobile data enabled" : "or use phone hotspot");
+            snprintf(l1, sizeof l1, g_app.wifi_mode == 3 ? "Open BikeNav Helper" : "Join WiFi %s", CONFIG_AAM_AP_SSID);
+            snprintf(l2, sizeof l2, "%s", g_app.wifi_mode == 3 ? "Tap Connect in the app" : g_app.wifi_mode == 0 ? "Keep mobile data enabled" : "or use phone hotspot");
         }
         break;
     case STAGE_PHONE:
         title = "Phone found";
         snprintf(l1, sizeof l1, "%s", ip_line);
-        snprintf(l2, sizeof l2, "Start the headunit server");
+        snprintf(l2, sizeof l2, g_app.wifi_mode == 3 ? "Waiting for helper relay" : "Start the headunit server");
         break;
     case STAGE_TCP: title = "Connecting"; snprintf(l1, sizeof l1, "%s", ip_line); break;
     case STAGE_VERSION: title = "Checking version"; snprintf(l1, sizeof l1, "%s", ip_line); break;

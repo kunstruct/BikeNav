@@ -1,0 +1,27 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.kunstruct.bikenavhelper'
+    compileSdk 35
+    buildToolsVersion "35.0.0"
+    buildFeatures { buildConfig true }
+    defaultConfig {
+        applicationId 'com.kunstruct.bikenavhelper'
+        minSdk 29
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0-alpha1'
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+    signingConfigs {
+        release {
+            if (System.getenv('BIKENAV_KEYSTORE')) {
+                storeFile file(System.getenv('BIKENAV_KEYSTORE'))
+                storePassword System.getenv('BIKENAV_STORE_PASSWORD')
+                keyAlias 'bikenav-helper'
+                keyPassword System.getenv('BIKENAV_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
+    lint { abortOnError true }
+}
