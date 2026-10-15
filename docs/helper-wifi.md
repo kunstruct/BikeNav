@@ -61,6 +61,8 @@ Only the helper's board socket is bound to Wi-Fi. The app does **not** bind its 
 
 The helper targets SDK 35 and uses the nearby-Wi-Fi permission on Android 13+. The user reports the proof of concept works on the recorded Pixel / Android 17 setup; broader Android 17 compatibility is unverified. Builds have no native Android libraries and are architecture independent. No Play Store publication is part of this release.
 
+The full [development process and evidence record](helper-development-process.md) explains the flashing diagnosis, routing comparison, design decisions, implementation, release packaging and remaining daily-use work.
+
 ## Build and validation
 
 Android: JDK 17, Android SDK Platform 35, build tools 35.0.0, Gradle 8.9 (wrapper with pinned distribution checksum), Android Gradle Plugin 8.7.3. No application library dependencies.
