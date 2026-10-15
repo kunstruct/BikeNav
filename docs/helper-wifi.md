@@ -2,7 +2,15 @@
 
 Firmware **1.2.0-helper-alpha1**, Android helper **0.1.0-alpha1**.
 
-This experiment keeps the ESP32 as the Wi-Fi access point and uses an Android app to request a local-only connection. It aims to preserve cellular internet without running the phone hotspot. **Android Auto compatibility, screen-off reliability and lower battery consumption have not been established on a physical phone.** The existing Phone AP mode remains the tested fallback.
+This experiment keeps the ESP32 as the Wi-Fi access point and uses an Android app to request a local-only connection. It aims to preserve cellular internet without running the phone hotspot. **The user has reported a successful proof of concept on the Pixel 8 Pro / Android 17 setup. Battery savings and extended screen-off reliability remain unmeasured.** The existing Phone AP mode remains the tested fallback.
+
+## Successful device proof of concept — 2026-10-16
+
+After installing the matched firmware and APK, the user reported: “The proof of concept works brilliantly.” This records user-reported functional success of the Helper WiFi approach: Android Auto over board-hosted Wi-Fi with cellular internet retained, without running the phone hotspot.
+
+Test setup: Pixel 8 Pro on Android 17 (previously recorded device details), Waveshare ESP32-S3 2.8-inch board, firmware **1.2.0-helper-alpha1**, helper **0.1.0-alpha1**. This is feedback from the user's device test, not an independently observed lab result. No debug report, test duration or battery measurements accompanied the confirmation.
+
+The result supports continuing development of the local-only Wi-Fi relay. Remaining checks are battery consumption against Phone AP, prolonged screen-off operation, reconnection after interruptions and compatibility with other phones. Keep this release marked experimental until those checks are completed.
 
 ## Install and connect (no ADB)
 
@@ -49,9 +57,9 @@ Other phone apps → Android-selected internet network (intended: cellular)
 
 The helper sends an eight-byte version preface `BKNAVR1\n` to the board, then relays bytes unchanged in both directions using bounded 32 KiB buffers. It never terminates Android Auto TLS or decodes/re-encodes video. The firmware accepts connections only in Helper WiFi mode from its current AP client's DHCP address, validates the preface with a five-second deadline, and uses existing endpoint-generation checks to abandon stale sessions. The AP admits one phone and uses the existing WPA2 credentials. The preface identifies the protocol; it is **not an authentication secret**. Configure a private AP password for use around other people.
 
-Only the helper's board socket is bound to Wi-Fi. The app does **not** bind its entire process or Android Auto's process to Wi-Fi and does not implement a VPN. Android still controls cellular routing. Phone-local access to Android Auto's headunit server is an unverified compatibility requirement; failure there must be reported rather than worked around by pretending the connection succeeded.
+Only the helper's board socket is bound to Wi-Fi. The app does **not** bind its entire process or Android Auto's process to Wi-Fi and does not implement a VPN. Android still controls cellular routing. The successful user proof of concept supports phone-local access to Android Auto's headunit server on this setup; access on other phone/software combinations remains unverified.
 
-The helper targets SDK 35 and uses the nearby-Wi-Fi permission on Android 13+. Android 17 behavior must be tested on the actual Pixel. Builds have no native Android libraries and are architecture independent. No Play Store publication is part of this release.
+The helper targets SDK 35 and uses the nearby-Wi-Fi permission on Android 13+. The user reports the proof of concept works on the recorded Pixel / Android 17 setup; broader Android 17 compatibility is unverified. Builds have no native Android libraries and are architecture independent. No Play Store publication is part of this release.
 
 ## Build and validation
 
