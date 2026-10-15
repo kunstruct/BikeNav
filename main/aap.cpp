@@ -16,6 +16,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <atomic>
 #include <sys/select.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -32,6 +33,7 @@
 #include "mbedtls/error.h"
 #include "app.h"
 #include "pb.h"
+#include "socket_write.h"
 #include "aap_cert.h"
 
 static const char *TAG = "aap";
@@ -77,14 +79,16 @@ enum { VIDEO_FOCUS_PROJECTED = 1, VIDEO_FOCUS_NATIVE = 2 };
 #define VIDEO_MSG_CAP (1024 * 1024)
 #define OTHER_MSG_CAP (64 * 1024)
 #define BIO_CAP (32 * 1024)
+#define TX_CAP (BIO_CAP + 6) // largest plaintext TLS flight + framing/id space
 #define NCH 16
 
 // ---- session state --------------------------------------------------------------------------
-static int s_sock = -1;
-static volatile bool s_encrypted;
-static volatile bool s_alive;            // session up and allowed to send
-static volatile bool s_sensor_open;
-static volatile int32_t s_video_session = 0;
+static std::atomic<int> s_sock{-1};
+static uint32_t s_link_generation; // owned by the network/protocol task
+static std::atomic<bool> s_encrypted{false};
+static std::atomic<bool> s_alive{false};  // session up and allowed to send
+static std::atomic<bool> s_sensor_open{false};
+static std::atomic<int32_t> s_video_session{0};
 static int32_t s_session_ids[NCH];
 static SemaphoreHandle_t s_tx_lock;      // one TLS context: every encrypt and decrypt holds this
 static uint8_t *s_rx_frame;
@@ -159,14 +163,13 @@ static bool tls_init(void) {
 
 // ---- socket helpers ---------------------------------------------------------------------------
 static bool tcp_send_all(const uint8_t *p, size_t n) {
-    while (n) {
-        int r = send(s_sock, p, n, 0);
-        if (r < 0) {
-            if (errno == EAGAIN || errno == EWOULDBLOCK) { vTaskDelay(1); continue; }
-            ESP_LOGW(TAG, "send failed: errno %d", errno);
-            return false;
-        }
-        p += r; n -= r;
+    int error;
+    if (!socket_write_all(s_sock, p, n, 2500000,
+                         [] { return esp_timer_get_time(); }, [] { vTaskDelay(1); }, &error)) {
+        ESP_LOGW(TAG, "send failed: errno %d", error);
+        app_set_error(error == ETIMEDOUT ? "Send timed out; reconnecting" : "Send failed; reconnecting");
+        s_alive = false;
+        return false;
     }
     return true;
 }
@@ -176,17 +179,27 @@ static bool tcp_recv_all(uint8_t *p, size_t n, int idle_ms, int body_ms) {
     int64_t start = esp_timer_get_time();
     size_t got = 0;
     while (got < n) {
-        int r = recv(s_sock, p + got, n - got, 0);
-        if (r > 0) { got += r; g_aap_rx_bytes += r; continue; }
-        if (r == 0) { ESP_LOGW(TAG, "phone closed the connection"); return false; }
-        if (errno != EAGAIN && errno != EWOULDBLOCK) { ESP_LOGW(TAG, "recv failed: errno %d", errno); return false; }
-        esp_task_wdt_reset();
+        if (!s_alive) return false;
+        if (!net_link_valid(s_link_generation)) {
+            app_set_error("WiFi changed; reconnecting");
+            return false;
+        }
         int limit = got ? body_ms : idle_ms;
-        if ((esp_timer_get_time() - start) / 1000 > limit) {
+        if ((esp_timer_get_time() - start) / 1000 >= limit) {
             ESP_LOGW(TAG, "recv timeout (%u of %u bytes)", (unsigned)got, (unsigned)n);
             return false;
         }
-        if (!s_alive && s_encrypted) return false;
+        int r = recv(s_sock, p + got, n - got, 0);
+        if (r > 0) {
+            if (!got) start = esp_timer_get_time(); // independent body deadline
+            got += r; g_aap_rx_bytes += r;
+            esp_task_wdt_reset();
+            continue;
+        }
+        if (r == 0) { ESP_LOGW(TAG, "phone closed the connection"); return false; }
+        if (errno == EINTR) continue;
+        if (errno != EAGAIN && errno != EWOULDBLOCK) { ESP_LOGW(TAG, "recv failed: errno %d", errno); return false; }
+        esp_task_wdt_reset();
     }
     return true;
 }
@@ -275,13 +288,21 @@ static bool recv_all(uint8_t *p, size_t n, int idle_ms, int body_ms) {
 static bool is_control_type(uint16_t id) { return id >= 1 && id <= 26; }
 
 static bool send_message(uint8_t ch, uint16_t id, const uint8_t *payload, size_t len) {
-    if (s_sock < 0) return false;
-    xSemaphoreTake(s_tx_lock, portMAX_DELAY);
+    if (len > TX_CAP - 6 || (len && !payload)) {
+        ESP_LOGE(TAG, "outgoing payload too large: %u", (unsigned)len);
+        return false;
+    }
+    if (xSemaphoreTake(s_tx_lock, pdMS_TO_TICKS(2000)) != pdTRUE) {
+        s_alive = false;
+        app_set_error("Link busy; reconnecting");
+        return false;
+    }
+    if (s_sock < 0 || !s_alive) { xSemaphoreGive(s_tx_lock); return false; }
     uint8_t flags = F_FIRST | F_LAST;
     if (ch != CH_CONTROL && is_control_type(id)) flags |= F_CONTROL;
     uint8_t *plain = s_tx_buf + 4;
     plain[0] = id >> 8; plain[1] = id & 0xff;
-    memcpy(plain + 2, payload, len);
+    if (len) memcpy(plain + 2, payload, len);
     size_t plen = len + 2;
     const uint8_t *body = plain;
     size_t blen = plen;
@@ -302,6 +323,7 @@ static bool send_message(uint8_t ch, uint16_t id, const uint8_t *payload, size_t
         uint8_t hdr[4] = { ch, flags, (uint8_t)(blen >> 8), (uint8_t)blen };
         ok = send_all(hdr, 4) && send_all(body, blen);
     }
+    if (!ok) s_alive = false;
 #if CONFIG_AAM_LOG_MESSAGES
     ESP_LOGI(TAG, "TX ch %d id 0x%04X len %u", ch, id, (unsigned)len);
 #endif
@@ -358,7 +380,7 @@ void aap_send_touch(int action, int x, int y) {
 }
 
 void aap_send_video_ack(void) {
-    if (!s_alive) return;
+    if (!s_alive || !s_encrypted || g_app.stage < STAGE_DISCOVERY) return;
     uint8_t b[16]; pb_w w; pb_init(&w, b, sizeof b);
     pb_int(&w, 1, s_video_session);
     pb_varint(&w, 2, 1);
@@ -367,10 +389,11 @@ void aap_send_video_ack(void) {
 
 // The video task only queues ACKs: sending one means waiting for the TLS lock, which the
 // network task holds while it decrypts (up to a few ms per 16 KB frame).
+static void service_video_requests(void);
 static void ack_task(void *) {
     for (;;) {
-        ulTaskNotifyTake(pdFALSE, portMAX_DELAY);  // one ACK per queued frame
-        aap_send_video_ack();
+        if (ulTaskNotifyTake(pdFALSE, pdMS_TO_TICKS(100))) aap_send_video_ack();
+        service_video_requests();
     }
 }
 
@@ -389,12 +412,19 @@ static void send_media_ack(uint8_t ch) {
 // focus cycle). The phone answers a regained focus with a fresh IDR.
 static esp_timer_handle_t s_focus_timer;
 static int64_t s_last_kf_request;
+static std::atomic<bool> s_keyframe_pending{false}, s_focus_pending{false};
 static void focus_regain_cb(void *) {
-    if (s_alive) send_video_focus(VIDEO_FOCUS_PROJECTED, true);
+    s_focus_pending.store(true); // never perform socket I/O on the shared timer task
 }
 void aap_request_keyframe(void) {
+    s_keyframe_pending.store(true);
+}
+static void service_video_requests(void) {
+    if (s_focus_pending.exchange(false) && s_alive && s_encrypted && g_app.stage >= STAGE_DISCOVERY)
+        send_video_focus(VIDEO_FOCUS_PROJECTED, true);
+    if (!s_keyframe_pending.exchange(false)) return;
     int64_t now = esp_timer_get_time();
-    if (!s_alive || now - s_last_kf_request < 2000000) return;
+    if (!s_alive || !s_encrypted || g_app.stage < STAGE_DISCOVERY || now - s_last_kf_request < 2000000) return;
     s_last_kf_request = now;
     ESP_LOGW(TAG, "requesting a keyframe (video focus cycle)");
     send_video_focus(VIDEO_FOCUS_NATIVE, false);
@@ -420,17 +450,11 @@ static void add_audio_sink(pb_w *w, int ch, int stream_type, int rate, int chann
 // Android Auto's newer car service aborts setup right after discovery when a head unit without
 // a microphone claims to be anything but a motorcycle (Open Headunit, VehicleTypePolicy.kt), and a
 // motorcycle only gets two-wheeler directions. So the board announces a microphone and claims a
-// car; mic requests are declined (no mic on this board, the phone's own mic is not used).
-// The phone keeps the type it first stored for a vehicle id, hence a fresh id per type.
-#if CONFIG_AAM_MOTORCYCLE
-#define VEHICLE_ID "MININAV0002-moto"
-#define VEHICLE_TYPE 3
-#else
-#define VEHICLE_ID "MININAV0003"
-#define VEHICLE_TYPE 1
-#endif
-
+// car in the optional car profile; mic requests are declined. Motorcycle is now the default.
+// The phone keeps the type it first stored for a vehicle id, hence a separate id per type.
 static void send_service_discovery_response(void) {
+    const int vehicle_type = g_app.motorcycle ? 3 : 1;
+    const char *vehicle_id = g_app.motorcycle ? "MININAV0002-moto" : "MININAV0003";
     static uint8_t *out = (uint8_t *)heap_caps_malloc(1024, MALLOC_CAP_SPIRAM);
     pb_w w; pb_init(&w, out, 1024);
     uint8_t a[96], b[96], c[160];
@@ -485,7 +509,7 @@ static void send_service_discovery_response(void) {
     }
 
     // microphone source (16 kHz mono PCM); requests to open it are declined
-    if (VEHICLE_TYPE != 3) {
+    if (vehicle_type != 3) {
         pb_init(&y, b, sizeof b); pb_varint(&y, 1, 16000); pb_varint(&y, 2, 16); pb_varint(&y, 3, 1);
         pb_init(&x, a, sizeof a); pb_varint(&x, 1, 1); pb_msg(&x, 2, &y);
         pb_init(&z, c, sizeof c); pb_varint(&z, 1, CH_MIC); pb_msg(&z, 5, &x);
@@ -503,24 +527,24 @@ static void send_service_discovery_response(void) {
     pb_string(&w, 2, "MiniNav");          // make
     pb_string(&w, 3, "ESP32-S3");         // model
     pb_string(&w, 4, "2026");             // year
-    pb_string(&w, 5, VEHICLE_ID);
+    pb_string(&w, 5, vehicle_id);
     pb_varint(&w, 6, CONFIG_AAM_RIGHT_HAND_DRIVE ? 1 : 0);
     pb_string(&w, 7, "DIY");              // head unit make
     pb_string(&w, 8, "MiniNav 2.8");      // head unit model
-    pb_string(&w, 9, "1");                // sw build
-    pb_string(&w, 10, "1.0");             // sw version
+    pb_string(&w, 9, "3");                // sw build
+    pb_string(&w, 10, "1.1.1-bike");       // sw version
     pb_bool(&w, 11, false);               // can play native media during VR
     pb_bool(&w, 12, false);               // keep the projected clock
     pb_varint(&w, 13, 0x06);              // hide phone signal + battery on the small screen
     pb_string(&w, 14, "MiniNav");
     pb_init(&x, a, sizeof a);
     pb_string(&x, 1, "MiniNav"); pb_string(&x, 2, "ESP32-S3"); pb_string(&x, 3, "2026");
-    pb_string(&x, 4, VEHICLE_ID); pb_string(&x, 5, "DIY"); pb_string(&x, 6, "MiniNav 2.8");
-    pb_string(&x, 7, "1"); pb_string(&x, 8, "1.0");
-    pb_varint(&x, 9, VEHICLE_TYPE);  // see VEHICLE_ID
+    pb_string(&x, 4, vehicle_id); pb_string(&x, 5, "DIY"); pb_string(&x, 6, "MiniNav 2.8");
+    pb_string(&x, 7, "3"); pb_string(&x, 8, "1.1.1-bike");
+    pb_varint(&x, 9, vehicle_type);
     pb_msg(&w, 17, &x);
 
-    ESP_LOGI(TAG, "service discovery answered (%u bytes)", (unsigned)w.len);
+    ESP_LOGI(TAG, "service discovery: %s (%u bytes)", g_app.motorcycle ? "motorcycle" : "car", (unsigned)w.len);
     send_pb(CH_CONTROL, MSG_SERVICE_DISCOVERY_RESPONSE, &w);
 }
 
@@ -575,7 +599,7 @@ static inline void log_message(uint8_t ch, uint16_t id, const uint8_t *p, size_t
 }
 
 static bool s_bye;
-static volatile bool s_restart;   // board asked for a new session (layout change)
+static std::atomic<bool> s_restart{false}; // board asked for a new session
 
 void aap_restart_session(void) {
     if (!s_alive || g_app.stage < STAGE_DISCOVERY) return;  // not connected: the next session uses the new layout anyway
@@ -815,6 +839,9 @@ static bool tls_handshake(void) {
 // just disappears leaves Android Auto's headunit server holding the dead session, and the next
 // connection then sticks at "version" until the server is restarted on the phone.
 static void say_goodbye(void) {
+#if !CONFIG_AAM_SERIAL_TRANSPORT
+    if (!net_link_valid(s_link_generation)) return;
+#endif
     uint8_t b[4]; pb_w w; pb_init(&w, b, sizeof b); pb_varint(&w, 1, 1);  // ByeByeRequest { USER_SELECTION }
     if (!send_pb(CH_CONTROL, MSG_BYEBYE_REQUEST, &w)) return;  // link already gone
     // Give the phone up to 1 s to answer; anything else that arrives meanwhile is decrypted
@@ -836,6 +863,9 @@ static void say_goodbye(void) {
 }
 
 static void run_session(void) {
+    esp_timer_stop(s_focus_timer);
+    s_keyframe_pending.store(false);
+    s_focus_pending.store(false);
     s_encrypted = false;
     s_alive = true;
     s_sensor_open = false;
@@ -848,7 +878,7 @@ static void run_session(void) {
     if (!version_exchange() || !tls_handshake()) return;
     g_app.error[0] = 0;
 
-    while (!s_bye) {
+    while (!s_bye && s_alive) {
         frame_hdr h;
         if (!read_frame(&h, 20000)) {
             if (g_app.stage < STAGE_VIDEO) app_set_error("Phone went quiet");
@@ -916,6 +946,10 @@ static bool connect_phone(const char *ip) {
     int one = 1;
     setsockopt(s, IPPROTO_TCP, TCP_NODELAY, &one, sizeof one);
     setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof one);
+    int idle = 5, interval = 2, probes = 3;
+    setsockopt(s, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof idle);
+    setsockopt(s, IPPROTO_TCP, TCP_KEEPINTVL, &interval, sizeof interval);
+    setsockopt(s, IPPROTO_TCP, TCP_KEEPCNT, &probes, sizeof probes);
     // Non-blocking connect with a 4 s limit: a phone that dozes on WiFi makes a blocking
     // connect hang ~18 s (ARP retries), long enough to trip the task watchdog.
     int fl = fcntl(s, F_GETFL, 0);
@@ -970,14 +1004,20 @@ static void aap_task(void *) {
 #endif
     for (;;) {
         esp_task_wdt_reset();
-        if (!net_phone_ip(ip, sizeof ip)) {
+        if (!net_phone_endpoint(ip, sizeof ip, &s_link_generation)) {
             if (g_app.stage > STAGE_AP) app_set_stage(STAGE_AP);
             vTaskDelay(pdMS_TO_TICKS(500));
             continue;
         }
         if (g_app.stage < STAGE_PHONE || g_app.stage > STAGE_PHONE) app_set_stage(STAGE_PHONE);
         ESP_LOGI(TAG, "connecting to %s:%d", ip, CONFIG_AAM_PHONE_PORT);
+        net_set_streaming(true);
         if (connect_phone(ip)) {
+            if (!net_link_valid(s_link_generation)) {
+                close_socket();
+                net_set_streaming(false);
+                continue;
+            }
             int64_t t0 = esp_timer_get_time();
             ESP_LOGI(TAG, "TCP connected (go/no-go passed)");
             app_set_stage(STAGE_TCP);
@@ -992,6 +1032,7 @@ static void aap_task(void *) {
             silent = g_app.stage == STAGE_TCP ? silent + 1 : 0;
             app_set_stage(STAGE_PHONE);
         }
+        net_set_streaming(false);
         int wait_ms = s_restart ? 300 : 3000;
         s_restart = false;
         if (silent >= 3) {
@@ -999,11 +1040,10 @@ static void aap_task(void *) {
             if (silent == 3) ESP_LOGW(TAG, "phone accepts but never answers: restart its headunit server; retrying every 20 s");
             wait_ms = 20000;
         }
-        char ip2[16];
         for (int t = 0; t < wait_ms; t += 500) {
             esp_task_wdt_reset();
             vTaskDelay(pdMS_TO_TICKS(500));
-            if (!net_phone_ip(ip2, sizeof ip2) || strcmp(ip, ip2)) { silent = 0; break; }  // phone rejoined
+            if (!net_link_valid(s_link_generation)) { silent = 0; break; }
         }
     }
 }
@@ -1011,7 +1051,7 @@ static void aap_task(void *) {
 void aap_start(void) {
     s_tx_lock = xSemaphoreCreateMutex();
     s_rx_frame = (uint8_t *)heap_caps_malloc(RX_FRAME_CAP, MALLOC_CAP_SPIRAM);
-    s_tx_buf = (uint8_t *)heap_caps_malloc(8192, MALLOC_CAP_SPIRAM);
+    s_tx_buf = (uint8_t *)heap_caps_malloc(TX_CAP, MALLOC_CAP_SPIRAM);
     s_bio_out = (uint8_t *)heap_caps_malloc(BIO_CAP, MALLOC_CAP_SPIRAM);
     s_scratch = (uint8_t *)heap_caps_malloc(RX_FRAME_CAP, MALLOC_CAP_SPIRAM);
     for (int i = 0; i < NCH; i++) {
@@ -1019,16 +1059,16 @@ void aap_start(void) {
         s_asm[i].buf = (uint8_t *)heap_caps_malloc(s_asm[i].cap, MALLOC_CAP_SPIRAM);
         assert(s_asm[i].buf);
     }
-    assert(s_rx_frame && s_tx_buf && s_bio_out);
+    assert(s_tx_lock && s_rx_frame && s_tx_buf && s_bio_out && s_scratch);
     esp_timer_create_args_t ta = {};
     ta.callback = focus_regain_cb;
     ta.name = "focus";
-    esp_timer_create(&ta, &s_focus_timer);
+    ESP_ERROR_CHECK(esp_timer_create(&ta, &s_focus_timer));
     if (!tls_init()) { app_set_error("TLS init failed"); return; }
 #if CONFIG_AAM_SERIAL_TRANSPORT
     s_ser_rx = xStreamBufferCreateWithCaps(64 * 1024, 1, MALLOC_CAP_SPIRAM);
     xTaskCreatePinnedToCore(ser_reader_task, "ser_rx", 4096, NULL, 9, NULL, 0);
 #endif
-    xTaskCreatePinnedToCore(ack_task, "ack", 4096, NULL, 9, &s_ack_task, 0);
-    xTaskCreatePinnedToCore(aap_task, "aap", 12288, NULL, 8, NULL, 0);
+    configASSERT(xTaskCreatePinnedToCore(ack_task, "ack", 4096, NULL, 9, &s_ack_task, 0) == pdPASS);
+    configASSERT(xTaskCreatePinnedToCore(aap_task, "aap", 12288, NULL, 8, NULL, 0) == pdPASS);
 }

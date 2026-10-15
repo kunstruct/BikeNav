@@ -1,17 +1,54 @@
 #!/usr/bin/env python3
 """Captures the board's serial log for N seconds; optional commands are sent after a delay.
    python tools/serial_log.py 20 [--reset] [--send "5:demo"]"""
-import glob, sys, time, serial
-port = (sorted(glob.glob("/dev/cu.usbmodem*")) or ["/dev/cu.usbmodem1101"])[0]  # the board's USB port (name depends on the Mac port)
-secs = float(sys.argv[1]) if len(sys.argv) > 1 else 15
-sends = [a.split(":", 1) for a in sys.argv[2:] if ":" in a]
-s = serial.Serial(port, 115200, timeout=0.2)
-if "--reset" in sys.argv:
-    s.dtr = False; s.rts = True; time.sleep(0.1); s.rts = False
-t0 = time.time(); sent = set()
-while time.time() - t0 < secs:
-    for i, (t, cmd) in enumerate(sends):
-        if i not in sent and time.time() - t0 >= float(t):
-            s.write((cmd + "\n").encode()); sent.add(i); print(f">>> {cmd}", flush=True)
-    d = s.read(4096)
-    if d: sys.stdout.write(d.decode(errors="replace")); sys.stdout.flush()
+import argparse
+import sys
+import time
+import serial
+from serial.tools import list_ports
+
+
+def timed_command(value):
+    try:
+        delay, command = value.split(":", 1)
+        delay = float(delay)
+        if delay < 0 or not command:
+            raise ValueError
+        return delay, command
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("use SECONDS:COMMAND, e.g. 3:touchtest") from exc
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("seconds", nargs="?", type=float, default=15)
+    parser.add_argument("--port", help="serial device, e.g. /dev/ttyACM0 or COM3")
+    parser.add_argument("--reset", action="store_true")
+    parser.add_argument("--send", action="append", type=timed_command, default=[])
+    args = parser.parse_args()
+    if not args.port:
+        ports = [p.device for p in list_ports.comports() if p.vid == 0x303A]
+        if len(ports) != 1:
+            parser.error("use --port; expected exactly one connected Espressif USB device")
+        args.port = ports[0]
+    with serial.Serial(args.port, 115200, timeout=0.2) as conn:
+        if args.reset:
+            conn.dtr = False; conn.rts = True
+            time.sleep(0.1)
+            conn.rts = False
+        start = time.monotonic()
+        sent = set()
+        while time.monotonic() - start < args.seconds:
+            for i, (delay, command) in enumerate(args.send):
+                if i not in sent and time.monotonic() - start >= delay:
+                    conn.write((command + "\n").encode())
+                    sent.add(i)
+                    print(f">>> {command}", flush=True)
+            data = conn.read(4096)
+            if data:
+                sys.stdout.write(data.decode(errors="replace"))
+                sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    main()

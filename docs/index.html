@@ -245,7 +245,7 @@
   </ol>
   <div class="tip"><b>If the port doesn't show up or flashing can't connect</b>Use a data cable (some only charge). Hold <kbd>BOOT</kbd>, tap <kbd>RESET</kbd>, release <kbd>BOOT</kbd>, then click Install again.
     After flashing in this mode, tap <kbd>RESET</kbd> once.</div>
-  <div class="note"><b>Default WiFi names</b>This firmware uses hotspot <code>MiniNavHotspot</code>, board WiFi <code>MiniNav</code>, password <code>mininav123</code> for both, and right-hand drive.
+  <div class="note"><b>Default WiFi names</b>This firmware defaults to <b>Bike</b> and <b>Board WiFi</b>. Its optional phone hotspot is <code>MiniNavHotspot</code>, board WiFi <code>MiniNav</code>, password <code>mininav123</code> for both, and right-hand drive.
     To change them, <a href="build-from-source.html">build from source</a> instead.</div>
   <details>
     <summary>Flash the file by hand instead</summary>
@@ -308,7 +308,7 @@
   <figure>
     <svg viewBox="0 0 760 240" role="img" aria-label="Two connection modes">
       <rect x="10" y="10" width="360" height="220" rx="20" class="s-soft"/>
-      <text x="190" y="40" text-anchor="middle" class="s-accent" font-size="16" font-weight="800">A · Phone hotspot (recommended)</text>
+      <text x="190" y="40" text-anchor="middle" class="s-accent" font-size="16" font-weight="800">A · Phone hotspot (fallback)</text>
       <rect x="40" y="70" width="80" height="130" rx="14" class="s-card"/>
       <text x="80" y="140" text-anchor="middle" class="s-text" font-size="12" font-weight="700">phone</text>
       <text x="80" y="156" text-anchor="middle" class="s-muted" font-size="11">hotspot</text>
@@ -331,18 +331,18 @@
     </svg>
   </figure>
   <div class="tabs" role="tablist" data-group="mode">
-    <button role="tab" aria-selected="true" data-tab="hotspot">A · Phone hotspot</button>
-    <button role="tab" aria-selected="false" data-tab="ap">B · Board WiFi</button>
+    <button role="tab" aria-selected="false" data-tab="hotspot">A · Phone hotspot</button>
+    <button role="tab" aria-selected="true" data-tab="ap">B · Board WiFi</button>
   </div>
-  <div class="tabpanel on" data-panel="hotspot">
+  <div class="tabpanel" data-panel="hotspot">
     <ol class="steps">
       <li>On the phone: <b>Settings → Connections → Mobile Hotspot</b> (names vary by brand).</li>
       <li>Name it <code>MiniNavHotspot</code>, password <code>mininav123</code> (or what you set in menuconfig), band <b>2.4&nbsp;GHz</b>.</li>
       <li>Turn the hotspot on. If the phone ever joined <code>MiniNav</code>, tap it in the WiFi list → <b>Forget</b>.</li>
-      <li>Power the board. Within ~10&nbsp;s it joins the hotspot and finds Android Auto.</li>
+      <li>On the board connection screen, tap the top-right WiFi label until <b>Phone AP</b> is selected (the board restarts). It then joins the hotspot and finds Android Auto.</li>
     </ol>
   </div>
-  <div class="tabpanel" data-panel="ap">
+  <div class="tabpanel on" data-panel="ap">
     <ol class="steps">
       <li>Power the board, then on the phone join WiFi <code>MiniNav</code>, password <code>mininav123</code>, and allow auto-reconnect.</li>
       <li>When the phone says the network has no internet, choose to <b>stay connected</b>.</li>
@@ -353,11 +353,18 @@
   </div>
 
   <h3>The connection screen</h3>
+  <div class="note"><b>Bike firmware controls</b>Tap <b>Bike / Car</b> at the top to choose the vehicle profile.
+    Tap the top-right WiFi label to cycle <b>Board WiFi → Phone AP → Auto WiFi</b>; this saves and restarts the board.
+    New installations start with <b>Bike</b> and <b>Board WiFi</b>. Motorcycle routing availability depends on Maps and region.
+    Touch detection supports both V1 CST328 and V2 CST3530. See <a href="device-testing.md">device checks and touch diagnostics</a>.</div>
+
   <figure>
     <svg viewBox="0 0 320 240" style="max-width:420px;border-radius:14px" role="img" aria-label="Connection screen">
       <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F7FB"/><stop offset="1" stop-color="#E2EBF7"/></linearGradient></defs>
       <rect width="320" height="240" fill="url(#g)"/>
       <text x="18" y="28" font-size="22" font-weight="800"><tspan fill="#23304A">Mini</tspan><tspan fill="#4A7FE0">Nav</tspan></text>
+      <text x="192" y="23" text-anchor="middle" font-size="11" fill="#4A7FE0">Bike</text>
+      <text x="266" y="23" text-anchor="middle" font-size="11" fill="#4A7FE0">Board WiFi</text>
       <rect x="12" y="38" width="296" height="130" rx="18" fill="#fff"/>
       <circle cx="68" cy="92" r="31.5" fill="none" stroke="#DCE4F0" stroke-width="9"/>
       <path d="M68 60.5 A31.5 31.5 0 0 1 95.3 108" fill="none" stroke="#4A7FE0" stroke-width="9" stroke-linecap="round"/>
@@ -398,8 +405,8 @@
 <section id="drive">
   <h2><span class="n">5</span>Ride or drive</h2>
   <ol class="steps">
-    <li>Plug the board into the USB port on your bike or in your car. It boots in under a second (the animation plays while WiFi starts).</li>
-    <li>Turn on the phone hotspot (mode A). Check the <b>headunit server</b> notification is still there.</li>
+    <li>Plug the board into the USB port on your bike or in your car. The connection screen shows the saved vehicle and WiFi choices.</li>
+    <li>With default <b>Board WiFi</b>, let the phone rejoin <code>MiniNav</code>; leave its hotspot off. Check the <b>headunit server</b> notification is still there. If using <b>Phone AP</b>, enable the phone hotspot instead.</li>
     <li>Start navigation in Google Maps on the phone (or by voice), then lock the phone and put it away.</li>
     <li>The map appears on the board. Mount it where you can glance at it.</li>
   </ol>

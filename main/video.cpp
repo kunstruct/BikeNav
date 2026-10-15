@@ -6,6 +6,7 @@
 // phone paces itself to our decode speed.
 #include <string.h>
 #include <stdio.h>
+#include <atomic>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
@@ -17,6 +18,7 @@
 #include "esp_h264_dec_sw.h"
 #include "esp_h264_dec_param.h"
 #include "app.h"
+#include "video_geometry.h"
 
 static const char *TAG = "video";
 
@@ -27,12 +29,14 @@ typedef struct {
     uint8_t *data;
     int len;
     bool from_phone;
+    uint32_t generation;
 } au_slot;
 
 static au_slot s_slots[AU_SLOTS];
 static QueueHandle_t s_free_q, s_ready_q;
-static volatile bool s_need_idr = true;     // decoder waits for an IDR before it accepts P-frames
-static volatile bool s_reset_req;
+static std::atomic<bool> s_need_idr{true};
+static std::atomic<bool> s_reset_req{false};
+static std::atomic<uint32_t> s_generation{0};
 static uint8_t s_codec_cfg[1024];
 static volatile int s_codec_cfg_len;
 static volatile bool s_codec_cfg_new;
@@ -66,7 +70,7 @@ static void avcc_to_annexb(uint8_t *p, int n) {
     while (i + 4 <= n) {
         uint32_t len = ((uint32_t)p[i] << 24) | (p[i + 1] << 16) | (p[i + 2] << 8) | p[i + 3];
         p[i] = 0; p[i + 1] = 0; p[i + 2] = 0; p[i + 3] = 1;
-        if (len == 0 || i + 4 + (int)len > n) break;
+        if (len == 0 || len > (uint32_t)(n - i - 4)) break;
         i += 4 + len;
     }
 }
@@ -75,13 +79,7 @@ bool video_push_au(const uint8_t *data, int len, bool from_phone) {
     if (from_phone && g_app.demo) app_toggle_demo("phone video arrived");
     if (!from_phone && !g_app.demo) return true;
     if (len <= 0 || len > AU_CAP) { g_vid_dropped++; return false; }
-    bool idr = has_idr(data, len);
-    if (s_need_idr && !idr) {
-        // Waiting for a keyframe: a P-frame now would decode to garbage.
-        g_vid_dropped++;
-        if (from_phone) aap_request_keyframe();
-        return false;
-    }
+    uint32_t generation = s_generation.load();
     int idx;
     // Phones can send past the window we announce (Open Headunit saw it too). Waiting a little
     // pushes back through TCP instead of dropping a P-frame and forcing a keyframe cycle.
@@ -96,15 +94,23 @@ bool video_push_au(const uint8_t *data, int len, bool from_phone) {
     au_slot *s = &s_slots[idx];
     memcpy(s->data, data, len);
     if (!is_annexb(s->data, len)) avcc_to_annexb(s->data, len);
+    bool idr = has_idr(s->data, len);
+    if (generation != s_generation.load() || (s_need_idr && !idr)) {
+        ++g_vid_dropped;
+        xQueueSend(s_free_q, &idx, portMAX_DELAY);
+        if (from_phone) aap_request_keyframe();
+        return false;
+    }
     s->len = len;
     s->from_phone = from_phone;
+    s->generation = generation;
     if (idr) s_need_idr = false;
     xQueueSend(s_ready_q, &idx, portMAX_DELAY);
     return true;
 }
 
 void video_set_codec_config(const uint8_t *data, int len) {
-    if (len > (int)sizeof s_codec_cfg) return;
+    if (!data || len <= 0 || len > (int)sizeof s_codec_cfg) return;
     portENTER_CRITICAL(&s_cfg_lock);
     memcpy(s_codec_cfg, data, len);
     s_codec_cfg_len = len;
@@ -113,6 +119,7 @@ void video_set_codec_config(const uint8_t *data, int len) {
 }
 
 void video_reset(void) {
+    ++s_generation;
     s_reset_req = true;
     s_need_idr = true;
 }
@@ -211,17 +218,14 @@ static void scale_split(const uint8_t *yuv, int w, int h, int cx, int cy, uint16
 
 static void show_frame(const uint8_t *yuv, int w, int h) {
     int64_t t0 = esp_timer_get_time();
-    uint16_t *fb = display_acquire_frame();
-    int cw, ch, cx, cy;
-    if (w == 800 && h == 480 && CONFIG_AAM_VIDEO_MARGIN_H == 0) {
-        cw = 640; ch = 480; cx = g_video_crop_x; cy = 0;   // the asked-for UI area, minus the rail if hidden
-    } else {
-        // anything else: a centred 4:3 crop
-        cw = w; ch = w * 3 / 4;
-        if (ch > h) { ch = h; cw = h * 4 / 3; }
-        cx = ((w - cw) / 2) & ~3; cy = ((h - ch) / 2) & ~1;
+    video_crop crop;
+    if (!yuv || !video_make_crop(w, h, g_video_crop_x, CONFIG_AAM_VIDEO_MARGIN_H == 0, &crop)) {
+        ++g_vid_errors;
+        return;
     }
-    if (cw == 640 && ch == 480) scale_split(yuv, w, h, cx, cy, fb);
+    uint16_t *fb = display_acquire_frame();
+    int cw = crop.w, ch = crop.h, cx = crop.x, cy = crop.y;
+    if (cw == 640 && ch == 480 && !(w & 3)) scale_split(yuv, w, h, cx, cy, fb);
     else scale_any(yuv, w, h, cx, cy, cw, ch, fb);
     g_vid_scale_us += esp_timer_get_time() - t0;
     display_submit_frame(fb);
@@ -235,8 +239,16 @@ static bool dec_open(void) {
     esp_h264_dec_cfg_sw_t cfg = {};
     cfg.pic_type = ESP_H264_RAW_FMT_I420;
     if (esp_h264_dec_sw_new(&cfg, &s_dec) != ESP_H264_ERR_OK) { ESP_LOGE(TAG, "decoder new failed"); return false; }
-    if (esp_h264_dec_open(s_dec) != ESP_H264_ERR_OK) { ESP_LOGE(TAG, "decoder open failed"); return false; }
-    esp_h264_dec_sw_get_param_hd(s_dec, &s_dec_param);
+    if (esp_h264_dec_open(s_dec) != ESP_H264_ERR_OK) {
+        ESP_LOGE(TAG, "decoder open failed");
+        esp_h264_dec_del(s_dec); s_dec = NULL;
+        return false;
+    }
+    if (esp_h264_dec_sw_get_param_hd(s_dec, &s_dec_param) != ESP_H264_ERR_OK) {
+        esp_h264_dec_close(s_dec); esp_h264_dec_del(s_dec);
+        s_dec = NULL; s_dec_param = NULL;
+        return false;
+    }
     return true;
 }
 
@@ -245,10 +257,12 @@ static void dec_close(void) {
     esp_h264_dec_close(s_dec);
     esp_h264_dec_del(s_dec);
     s_dec = NULL;
+    s_dec_param = NULL;
 }
 
 // Feeds a buffer through the decoder; shows any picture it completes. False on a decode error.
 static bool decode(uint8_t *data, int len, bool show) {
+    if (!s_dec || !s_dec_param) return false;
     esp_h264_dec_in_frame_t in = {};
     in.raw_data.buffer = data;
     in.raw_data.len = len;
@@ -263,7 +277,8 @@ static bool decode(uint8_t *data, int len, bool show) {
         in.raw_data.len -= in.consume;
         if (out.out_size > 0 && show) {
             esp_h264_resolution_t res = {};
-            esp_h264_dec_get_resolution(s_dec_param, &res);
+            if (esp_h264_dec_get_resolution(s_dec_param, &res) != ESP_H264_ERR_OK ||
+                !res.width || !res.height || (size_t)res.width * res.height * 3 / 2 > out.out_size) return false;
             static int lw, lh;
             if (res.width != lw || res.height != lh) {
                 lw = res.width; lh = res.height;
@@ -277,25 +292,48 @@ static bool decode(uint8_t *data, int len, bool show) {
 }
 
 static void video_task(void *) {
-    dec_open();
+    uint8_t *cfg = (uint8_t *)heap_caps_malloc(1024, MALLOC_CAP_SPIRAM);
+    assert(cfg);
     FILE *dump = NULL;
     for (;;) {
         int idx;
         if (xQueueReceive(s_ready_q, &idx, pdMS_TO_TICKS(500)) != pdTRUE) {
-            if (s_reset_req) { s_reset_req = false; dec_close(); dec_open(); }
+            if (s_reset_req.exchange(false)) dec_close();
             continue;
         }
         au_slot *s = &s_slots[idx];
+        if (s->generation != s_generation.load()) {
+            xQueueSend(s_free_q, &idx, portMAX_DELAY);
+            continue;
+        }
         if (s->from_phone) aap_queue_video_ack();  // pipelining: the next frame travels while this one decodes
         if (!s->from_phone && !g_app.demo) { xQueueSend(s_free_q, &idx, portMAX_DELAY); continue; }
-        if (s_reset_req) { s_reset_req = false; dec_close(); dec_open(); s_codec_cfg_new = true; }
+        if (s_reset_req.exchange(false)) {
+            dec_close();
+            portENTER_CRITICAL(&s_cfg_lock);
+            s_codec_cfg_new = true;
+            portEXIT_CRITICAL(&s_cfg_lock);
+        }
+        if (!s_dec) {
+            if (!dec_open()) {
+                ++g_vid_errors;
+                video_reset(); // discard queued frames tied to the unavailable decoder
+                app_set_error("Decoder unavailable; retrying");
+                if (s->from_phone) aap_request_keyframe();
+                xQueueSend(s_free_q, &idx, portMAX_DELAY);
+                vTaskDelay(pdMS_TO_TICKS(500));
+                continue;
+            }
+            portENTER_CRITICAL(&s_cfg_lock);
+            s_codec_cfg_new = true;
+            portEXIT_CRITICAL(&s_cfg_lock);
+        }
 
-        static uint8_t *cfg = (uint8_t *)heap_caps_malloc(1024, MALLOC_CAP_SPIRAM);
         int cfg_len = 0;
         portENTER_CRITICAL(&s_cfg_lock);
         if (s_codec_cfg_new && s->from_phone) { memcpy(cfg, s_codec_cfg, s_codec_cfg_len); cfg_len = s_codec_cfg_len; s_codec_cfg_new = false; }
         portEXIT_CRITICAL(&s_cfg_lock);
-        if (cfg_len) decode(cfg, cfg_len, false);
+        bool cfg_ok = !cfg_len || decode(cfg, cfg_len, false);
 
 #if CONFIG_AAM_DUMP_H264
         if (s->from_phone && sd_ready()) {
@@ -309,12 +347,13 @@ static void video_task(void *) {
         }
 #endif
         (void)dump;
-        if (!decode(s->data, s->len, true)) {
+        if (!cfg_ok || !decode(s->data, s->len, true)) {
             g_vid_errors++;
             dec_close();
-            dec_open();
-            s_need_idr = true;
+            video_reset(); // queued P-frames cannot reference the discarded decoder
+            portENTER_CRITICAL(&s_cfg_lock);
             s_codec_cfg_new = true;
+            portEXIT_CRITICAL(&s_cfg_lock);
             if (s->from_phone) aap_request_keyframe();
         }
         // No delay here: this task blocks every frame (scaler hand-off, queue wait), so the
@@ -330,6 +369,7 @@ void video_start(void) {
     }
     s_free_q = xQueueCreate(AU_SLOTS, sizeof(int));
     s_ready_q = xQueueCreate(AU_SLOTS, sizeof(int));
+    assert(s_free_q && s_ready_q);
     for (int i = 0; i < AU_SLOTS; i++) {
         s_slots[i].data = (uint8_t *)heap_caps_malloc(AU_CAP, MALLOC_CAP_SPIRAM);
         assert(s_slots[i].data);
@@ -337,6 +377,7 @@ void video_start(void) {
     }
     s_job_go = xSemaphoreCreateBinary();
     s_job_done = xSemaphoreCreateBinary();
-    xTaskCreatePinnedToCore(scale_helper_task, "scale", 3072, NULL, 5, NULL, 0);
-    xTaskCreatePinnedToCore(video_task, "video", 8192, NULL, 5, NULL, 1);
+    assert(s_job_go && s_job_done);
+    configASSERT(xTaskCreatePinnedToCore(scale_helper_task, "scale", 3072, NULL, 5, NULL, 0) == pdPASS);
+    configASSERT(xTaskCreatePinnedToCore(video_task, "video", 8192, NULL, 5, NULL, 1) == pdPASS);
 }

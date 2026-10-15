@@ -5,6 +5,7 @@
 #include <LovyanGFX.hpp>
 #include <math.h>
 #include <string.h>
+#include <atomic>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
@@ -13,6 +14,7 @@
 #include "driver/gpio.h"
 #include "app.h"
 #include "ui_fonts.h"
+#include "touch_protocol.h"
 #if CONFIG_AAM_DUMP_H264
 #include "esp_vfs_fat.h"
 #include "sdmmc_cmd.h"
@@ -41,7 +43,7 @@ static const char *TAG = "board";
 #define PIN_TP_INT 4
 #define PIN_TP_RST 2
 #define TP_I2C_PORT 0
-#define TP_ADDR 0x58      // CST3530
+#define TP_ADDR 0x58      // CST3530 (V2); CST328 (V1) is at 0x1a
 #define IMU_ROT_OFFSET 3  // quarter turns between accelerometer axes and panel (verified in the demo)
 
 class LGFX : public lgfx::LGFX_Device {
@@ -201,6 +203,11 @@ static const chip CHIPS[3] = { { 12, 178, 92, 50 }, { 114, 178, 92, 50 }, { 216,
 
 // A tap on the status screen (LCD coordinates).
 static void status_tap(int x, int y) {
+    if (y < 36 && x >= 160) {
+        if (x < 225) app_toggle_bike("screen");
+        else app_cycle_wifi("screen");
+        return;
+    }
     for (int i = 0; i < 3; i++) {
         const chip &k = CHIPS[i];
         if (x < k.x - 4 || x >= k.x + k.w + 4 || y < k.y - 6 || y >= k.y + k.h + 6) continue;
@@ -215,6 +222,12 @@ static void render_status(void) {
     LGFX_Sprite &s = s_ui;
     fill_gradient(s_ui_buf, p.bg0, p.bg1);
     text_mininav(s, FONT_HEAD, 18, 28, p.text, p.accent, false);
+    s.loadFont(FONT_SMALL);
+    s.setTextDatum(lgfx::middle_center);
+    s.setTextColor(c888(p.accent));
+    s.drawString(g_app.motorcycle ? "Bike" : "Car", 192, 20);
+    const char *wifi_label = g_app.wifi_mode == 0 ? "Board WiFi" : g_app.wifi_mode == 1 ? "Phone AP" : "Auto WiFi";
+    s.drawString(wifi_label, 266, 20);
 
     s.fillSmoothRoundRect(12, 38, 296, 130, 18, c888(p.card));
 
@@ -227,8 +240,13 @@ static void render_status(void) {
     switch (stage) {
     case STAGE_AP:
         title = "Waiting for phone";
-        snprintf(l1, sizeof l1, "Join WiFi %s", CONFIG_AAM_AP_SSID);
-        snprintf(l2, sizeof l2, "or hotspot %s", CONFIG_AAM_HOTSPOT_SSID);
+        if (g_app.wifi_mode == 1) {
+            snprintf(l1, sizeof l1, "Enable phone hotspot");
+            snprintf(l2, sizeof l2, "%s (2.4 GHz)", CONFIG_AAM_HOTSPOT_SSID);
+        } else {
+            snprintf(l1, sizeof l1, "Join WiFi %s", CONFIG_AAM_AP_SSID);
+            snprintf(l2, sizeof l2, "%s", g_app.wifi_mode == 0 ? "Keep mobile data enabled" : "or use phone hotspot");
+        }
         break;
     case STAGE_PHONE:
         title = "Phone found";
@@ -274,7 +292,7 @@ static void render_status(void) {
         bool on = i == 0 ? g_app.touch_enabled : i == 1 ? (g_app.full_screen && !g_app.touch_enabled) : g_app.night;
         bool locked = i == 1 && g_app.touch_enabled;
         const char *label = i == 0 ? "Touch" : i == 1 ? "Full screen" : "Theme";
-        const char *value = i == 2 ? (g_app.night ? "Dark" : "Light") : locked ? "Needs touch off" : on ? "On" : "Off";
+        const char *value = i == 0 && !board_touch_ready() ? "Not found" : i == 2 ? (g_app.night ? "Dark" : "Light") : locked ? "Needs touch off" : on ? "On" : "Off";
         bool filled = on && i != 2;
         s.fillSmoothRoundRect(k.x, k.y, k.w, k.h, 16, c888(filled ? p.accent : p.card));
         s.setTextDatum(lgfx::baseline_center);
@@ -628,97 +646,141 @@ static void imu_poll(void) {
     if (s_display_task) xTaskNotifyGive(s_display_task);
 }
 
-// ---- CST3530 touch -> Android Auto taps and drags --------------------------------------
-// This board's touch chip is a Hynitron CST3530 at I2C 0x58 with 32-bit register addresses (not
-// the CST328 at 0x1A that Waveshare's code expects). Protocol from the CST353X Linux driver in
-// gl-inet/gl-openwrt (package/kernel/cst353x): write D0070000, read 9 bytes ([0..1] checksum =
-// 0x55 + bytes 4..8; byte 8 high nibble 1 = down, 2 = held, 0 = up; x/y 12-bit in 4, 5, 7), then
-// write D00002AB to end the frame.
-static bool s_tp_ok;
+// ---- touch: auto-detect Waveshare V1 CST328 and V2 CST3530 ----------------------
+// Protocols/pins: Waveshare's V1/V2 board examples. Touch is owned by the main task.
+enum touch_chip { TOUCH_NONE, TOUCH_CST328, TOUCH_CST3530 };
+static std::atomic<touch_chip> s_touch_chip{TOUCH_NONE};
+bool board_touch_ready(void) { return s_touch_chip != TOUCH_NONE; }
+static bool s_touch_test;
+static uint32_t s_touch_reads, s_touch_bad, s_touch_contacts;
+static std::atomic<bool> s_touch_irq{false};
+static void touch_irq(void *) { s_touch_irq.store(true); }
 
-static bool cst3530_frame(uint8_t *raw, bool *acked = nullptr) {
-    static const uint8_t reg[4] = { 0xD0, 0x07, 0x00, 0x00 };
-    static const uint8_t end[4] = { 0xD0, 0x00, 0x02, 0xAB };
-    bool ok = lgfx::i2c::transactionWriteRead(TP_I2C_PORT, TP_ADDR, reg, 4, raw, 9, 400000).has_value();
-    lgfx::i2c::transactionWrite(TP_I2C_PORT, TP_ADDR, end, 4, 400000);
-    if (acked) *acked = ok;
-    if (!ok) return false;
-    uint16_t sum = 0x55 + raw[4] + raw[5] + raw[6] + raw[7] + raw[8];
-    return (raw[0] | (raw[1] << 8)) == sum;
+static const char *touch_name(void) {
+    return s_touch_chip == TOUCH_CST328 ? "CST328 (V1)" :
+           s_touch_chip == TOUCH_CST3530 ? "CST3530 (V2)" : "not detected";
+}
+
+void board_touch_diagnostics(bool toggle_test) {
+    if (toggle_test) s_touch_test = !s_touch_test;
+    ESP_LOGI(TAG, "touch=%s INT=%d reads=%lu invalid=%lu contacts=%lu local-test=%s",
+             touch_name(), gpio_get_level((gpio_num_t)PIN_TP_INT),
+             (unsigned long)s_touch_reads, (unsigned long)s_touch_bad,
+             (unsigned long)s_touch_contacts, s_touch_test ? "on" : "off");
+    if (toggle_test) display_toast(s_touch_test ? "Local touch test ON" : "Local touch test OFF");
+}
+
+static bool touch_read(touch_contact *c) {
+    ++s_touch_reads;
+    bool ok = false;
+    if (s_touch_chip == TOUCH_CST3530) {
+        const uint8_t reg[] = {0xd0, 0x07, 0x00, 0x00}, end[] = {0xd0, 0x00, 0x02, 0xab};
+        uint8_t raw[9] = {};
+        bool read = lgfx::i2c::transactionWriteRead(TP_I2C_PORT, 0x58, reg, sizeof reg, raw, sizeof raw, 400000).has_value();
+        bool ack = lgfx::i2c::transactionWrite(TP_I2C_PORT, 0x58, end, sizeof end, 400000).has_value();
+        ok = read && ack && touch_decode_cst3530(raw, sizeof raw, c);
+    } else if (s_touch_chip == TOUCH_CST328) {
+        const uint8_t count_reg[] = {0xd0, 0x05}, xy_reg[] = {0xd0, 0x00}, clear[] = {0xd0, 0x05, 0};
+        uint8_t count = 0, raw[27] = {};
+        bool read = lgfx::i2c::transactionWriteRead(TP_I2C_PORT, 0x1a, count_reg, sizeof count_reg, &count, 1, 400000).has_value();
+        if (read && (count & 15) > 0 && (count & 15) <= 5)
+            read = lgfx::i2c::transactionWriteRead(TP_I2C_PORT, 0x1a, xy_reg, sizeof xy_reg, raw, sizeof raw, 400000).has_value();
+        bool ack = lgfx::i2c::transactionWrite(TP_I2C_PORT, 0x1a, clear, sizeof clear, 400000).has_value();
+        ok = read && ack && touch_decode_cst328(raw, sizeof raw, count & 15, c);
+    }
+    if (!ok) ++s_touch_bad;
+    return ok;
 }
 
 static void touch_init(void) {
     gpio_config_t io = {};
     io.pin_bit_mask = 1ULL << PIN_TP_INT;
     io.mode = GPIO_MODE_INPUT;
-    gpio_config(&io);
+    io.pull_up_en = GPIO_PULLUP_ENABLE;
+    ESP_ERROR_CHECK(gpio_config(&io));
     io.pin_bit_mask = 1ULL << PIN_TP_RST;
     io.mode = GPIO_MODE_OUTPUT;
-    gpio_config(&io);
+    io.pull_up_en = GPIO_PULLUP_DISABLE;
+    ESP_ERROR_CHECK(gpio_config(&io));
     lgfx::i2c::init(TP_I2C_PORT, PIN_TP_SDA, PIN_TP_SCL);
-    gpio_set_level((gpio_num_t)PIN_TP_RST, 0); vTaskDelay(pdMS_TO_TICKS(10));
-    gpio_set_level((gpio_num_t)PIN_TP_RST, 1); vTaskDelay(pdMS_TO_TICKS(100));
-    // With no finger the chip answers with an all-zero frame (bad checksum): an ACK is presence.
+    // V2 needs substantially longer than the old 10/100 ms reset timings.
+    gpio_set_level((gpio_num_t)PIN_TP_RST, 0); vTaskDelay(pdMS_TO_TICKS(100));
+    gpio_set_level((gpio_num_t)PIN_TP_RST, 1); vTaskDelay(pdMS_TO_TICKS(500));
+    const uint8_t v2_reg[] = {0xd0, 0x07, 0x00, 0x00}, v1_reg[] = {0xd0, 0x05};
     uint8_t raw[9];
-    for (int i = 0; i < 5 && !s_tp_ok; i++) {
-        cst3530_frame(raw, &s_tp_ok);
-        if (!s_tp_ok) vTaskDelay(pdMS_TO_TICKS(20));
+    s_touch_chip = TOUCH_NONE;
+    for (int i = 0; i < 5 && s_touch_chip == TOUCH_NONE; ++i) {
+        if (lgfx::i2c::transactionWriteRead(TP_I2C_PORT, 0x58, v2_reg, sizeof v2_reg, raw, sizeof raw, 400000).has_value())
+            s_touch_chip = TOUCH_CST3530;
+        else if (lgfx::i2c::transactionWriteRead(TP_I2C_PORT, 0x1a, v1_reg, sizeof v1_reg, raw, 1, 400000).has_value())
+            s_touch_chip = TOUCH_CST328;
+        else vTaskDelay(pdMS_TO_TICKS(50));
     }
-    if (s_tp_ok) ESP_LOGI(TAG, "touch CST3530 found");
-    else ESP_LOGW(TAG, "touch controller not found");
+    if (s_touch_chip == TOUCH_CST328) {
+        const uint8_t normal[] = {0xd1, 0x09};
+        lgfx::i2c::transactionWrite(TP_I2C_PORT, 0x1a, normal, sizeof normal, 400000);
+        esp_err_t err = gpio_install_isr_service(0);
+        if (err != ESP_ERR_INVALID_STATE) ESP_ERROR_CHECK(err);
+        ESP_ERROR_CHECK(gpio_set_intr_type((gpio_num_t)PIN_TP_INT, GPIO_INTR_POSEDGE));
+        ESP_ERROR_CHECK(gpio_isr_handler_add((gpio_num_t)PIN_TP_INT, touch_irq, nullptr));
+    }
+    if (s_touch_chip != TOUCH_NONE) {
+        touch_contact c;
+        touch_read(&c); // clear any packet left by detection
+        ESP_LOGI(TAG, "touch %s found", touch_name());
+    } else ESP_LOGW(TAG, "touch not found at 0x58 or 0x1a; use BOOT controls, type touchtest for diagnostics");
 }
 
-// Raw touch is in the panel's portrait frame (240x320); map it to the current rotation.
-static void touch_to_screen(int rx, int ry, int rot, int &x, int &y) {
-    const int w0 = 240, h0 = 320;
-    switch (rot & 3) {
-    case 0: x = rx; y = ry; break;
-    case 1: x = ry; y = w0 - 1 - rx; break;
-    case 2: x = w0 - 1 - rx; y = h0 - 1 - ry; break;
-    default: x = h0 - 1 - ry; y = rx; break;
-    }
-}
-
-// Reads only while the chip pulls INT low, as the Linux driver does: polling and acknowledging the
-// frame register restarts the chip's contact tracking and turns a drag into a string of taps.
-// The status screen is always touchable (its setting buttons); Android Auto gets touches only while
-// video is up and the Touch setting is on.
+// V1's example uses a rising-edge interrupt; V2 uses active-low. Do not assume
+// both revisions have the same polarity or acknowledge idle packets continuously.
 static void touch_poll(void) {
-    static uint32_t t_move, t_last;
+    static uint32_t t_move, t_last, t_poll, t_diag, t_retry;
     static bool down, ui_down;
     static int ax, ay;
-    if (!s_tp_ok) return;
-    bool video = g_app.stage >= STAGE_VIDEO || g_app.demo;
-    bool to_aa = video && g_app.touch_enabled;
-    if (!to_aa && down) { down = false; aap_send_touch(1, ax, ay); }
-    if (video && !to_aa) return;
     uint32_t now = millis();
-    if (gpio_get_level((gpio_num_t)PIN_TP_INT) != 0) {
-        if (down && now - t_last > 300) { down = false; aap_send_touch(1, ax, ay); }  // lost the lift
-        if (now - t_last > 300) ui_down = false;
+    if (s_touch_chip == TOUCH_NONE) {
+        if (now - t_retry >= 10000) { t_retry = now; touch_init(); display_request_status(); }
         return;
     }
-    uint8_t raw[9];
-    if (!cst3530_frame(raw)) return;
-    int ev = raw[8] >> 4;
+    bool video = g_app.stage >= STAGE_VIDEO || g_app.demo;
+    bool to_aa = video && !g_app.demo && g_app.touch_enabled && !s_touch_test;
+    if (!to_aa && down) { down = false; aap_send_touch(1, ax, ay); }
+    // Release a lost lift even if INT stays high or the next frame is corrupt.
+    if (now - t_last > 300) {
+        if (down) { down = false; aap_send_touch(1, ax, ay); }
+        ui_down = false;
+    }
+    if (video && !to_aa && !s_touch_test) return;
+    if (now - t_poll < 20) return;
+    if (s_touch_chip == TOUCH_CST328 && !s_touch_irq.exchange(false)) return;
+    if (s_touch_chip == TOUCH_CST3530 && gpio_get_level((gpio_num_t)PIN_TP_INT) != 0) return;
+    t_poll = now;
+    touch_contact c;
+    if (!touch_read(&c)) return;
     t_last = now;
     int lx = 0, ly = 0;
-    bool pressed = ev == 1 || ev == 2;
-    if (pressed) {
-        int rx = raw[4] + ((raw[7] & 0x0F) << 8);
-        int ry = raw[5] + ((raw[7] & 0xF0) << 4);
-        if (rx >= 240 || ry >= 320) return;
-        touch_to_screen(rx, ry, g_app.rotation, lx, ly);
-    }
-    if (!video) {  // status screen: one action per finger press
-        if (pressed && !ui_down) { ui_down = true; status_tap(lx, ly); }
-        if (!pressed) ui_down = false;
+    if (c.pressed) touch_rotate(c.x, c.y, g_app.rotation, &lx, &ly);
+    if (s_touch_test) {
+        if (c.pressed && (!ui_down || now - t_diag >= 200)) {
+            t_diag = now;
+            ++s_touch_contacts;
+            ESP_LOGI(TAG, "touch raw=(%d,%d) screen=(%d,%d)", c.x, c.y, lx, ly);
+            char text[40]; snprintf(text, sizeof text, "Touch %d, %d", lx, ly);
+            display_toast(text);
+        }
+        ui_down = c.pressed;
         return;
     }
-    if (pressed) {
-        ax = lx * 2 + (g_video_crop_x - g_video_margin_w / 2);  // Android Auto UI coordinates (no margin; past a hidden left rail)
+    if (!video) {
+        if (c.pressed && !ui_down) { ++s_touch_contacts; ui_down = true; status_tap(lx, ly); }
+        if (!c.pressed) ui_down = false;
+        return;
+    }
+    if (c.pressed) {
+        ax = lx * 2 + (g_video_crop_x - g_video_margin_w / 2);
         ay = ly * 2;
         if (!down) {
+            ++s_touch_contacts;
             down = true; t_move = now;
             aap_send_touch(0, ax, ay);
         } else if (now - t_move >= 33) {
@@ -731,7 +793,6 @@ static void touch_poll(void) {
     }
 }
 
-// ---- BOOT button -----------------------------------------------------------------------------
 // Single press = day/night, quick double press = touch on/off, hold 1 s = demo.
 // A single press waits 350 ms for a possible second press, so the two never both fire.
 static void button_poll(void) {

@@ -13,6 +13,23 @@ menu "MiniNav (Android Auto minimap)"
         range 1 13
         default 6
 
+    config AAM_AP_DTIM
+        int "Board AP DTIM interval (beacons)"
+        range 1 3
+        default 3
+        help
+            Keeps the normal 100 TU beacon interval. A DTIM of 3 allows clients
+            to sleep longer between broadcast deliveries when idle. Continuous
+            video traffic still keeps the phone busy. Choose 1 if incompatible.
+
+    config AAM_STA_IDLE_POWER_SAVE
+        bool "Allow station modem sleep while waiting for Android Auto"
+        default y
+        help
+            Applies in Phone AP mode only. Power saving is disabled during
+            TCP/TLS/video so streaming latency is unchanged. This saves board
+            power, not the phone hotspot's own power consumption.
+
     config AAM_HOTSPOT_SSID
         string "Phone hotspot name the board joins (alternative to the access point)"
         default "MiniNavHotspot"
@@ -60,8 +77,11 @@ menu "MiniNav (Android Auto minimap)"
         default y
 
     config AAM_MOTORCYCLE
-        bool "Claim a motorcycle (no mic announced; Maps then needs two-wheeler directions)"
-        default n
+        bool "Motorcycle head unit (request two-wheeler navigation)"
+        default y
+        help
+            Announces a motorcycle with its own vehicle identity instead of a car.
+            Two-wheeler routing still depends on the phone, Maps version and region.
 
     config AAM_SPEECH_AUDIO
         bool "Announce a speech audio sink (navigation voice is then sent to the board and dropped)"

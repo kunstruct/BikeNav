@@ -10,6 +10,7 @@
 #include "esp_heap_caps.h"
 #include "nvs_flash.h"
 #include "nvs.h"
+#include "esp_system.h"
 #include "driver/usb_serial_jtag.h"
 #include "driver/usb_serial_jtag_vfs.h"
 #include "app.h"
@@ -39,14 +40,36 @@ void app_set_error(const char *fmt, ...) {
     display_request_status();
 }
 
-static void save_prefs(void) {
+static bool save_prefs(void) {
     nvs_handle_t h;
-    if (nvs_open("mininav", NVS_READWRITE, &h) != ESP_OK) return;
-    nvs_set_u8(h, "night", g_app.night);
-    nvs_set_u8(h, "touch", g_app.touch_enabled);
-    nvs_set_u8(h, "full", g_app.full_screen);
-    nvs_commit(h);
+    esp_err_t err = nvs_open("mininav", NVS_READWRITE, &h);
+    if (err != ESP_OK) { app_set_error("Cannot open saved settings"); return false; }
+    if (err == ESP_OK) err = nvs_set_u8(h, "night", g_app.night);
+    if (err == ESP_OK) err = nvs_set_u8(h, "touch", g_app.touch_enabled);
+    if (err == ESP_OK) err = nvs_set_u8(h, "full", g_app.full_screen);
+    if (err == ESP_OK) err = nvs_set_u8(h, "bike", g_app.motorcycle);
+    if (err == ESP_OK) err = nvs_set_u8(h, "wifi_mode", g_app.wifi_mode);
+    if (err == ESP_OK) err = nvs_commit(h);
     nvs_close(h);
+    if (err != ESP_OK) app_set_error("Could not save settings");
+    return err == ESP_OK;
+}
+
+void app_toggle_bike(const char *why) {
+    g_app.motorcycle = !g_app.motorcycle;
+    ESP_LOGI(TAG, "%s -> %s mode", why, g_app.motorcycle ? "motorcycle" : "car");
+    if (!save_prefs()) { g_app.motorcycle = !g_app.motorcycle; return; }
+    aap_restart_session();
+    display_request_status();
+}
+
+void app_cycle_wifi(const char *why) {
+    g_app.wifi_mode = (g_app.wifi_mode + 1) % 3;
+    ESP_LOGI(TAG, "%s -> WiFi mode %d; restarting", why, g_app.wifi_mode);
+    if (!save_prefs()) { g_app.wifi_mode = (g_app.wifi_mode + 2) % 3; return; }
+    display_toast("WiFi saved. Restarting...");
+    vTaskDelay(pdMS_TO_TICKS(400));
+    esp_restart();
 }
 
 void app_toggle_night(const char *why) {
@@ -96,10 +119,20 @@ static void console_poll(void) {
             else if (!strcmp(line, "night")) app_toggle_night("console");
             else if (!strcmp(line, "touch")) app_toggle_touch("console");
             else if (!strcmp(line, "full")) app_toggle_full("console");
+            else if (!strcmp(line, "bike")) app_toggle_bike("console");
+            else if (!strcmp(line, "wifi")) app_cycle_wifi("console");
+            else if (!strcmp(line, "touchtest")) board_touch_diagnostics(true);
+            else if (!strcmp(line, "touchstatus")) board_touch_diagnostics(false);
+            else if (!strcmp(line, "net")) net_diagnostics();
             else if (!strcmp(line, "shot")) display_dump();
-            else if (!strcmp(line, "status"))
+            else if (!strcmp(line, "status")) {
                 ESP_LOGI(TAG, "stage %s, phone %s, error \"%s\"", stage_name(g_app.stage), g_app.phone_ip, g_app.error);
-            else if (len) ESP_LOGI(TAG, "commands: demo, night, touch, full, shot, status");
+                ESP_LOGI(TAG, "vehicle=%s wifi=%s", g_app.motorcycle ? "motorcycle" : "car",
+                         g_app.wifi_mode == 0 ? "board AP" : g_app.wifi_mode == 1 ? "phone hotspot" : "auto");
+                board_touch_diagnostics(false);
+                net_diagnostics();
+            }
+            else if (len) ESP_LOGI(TAG, "commands: demo, night, touch, full, bike, wifi, net, touchtest, touchstatus, shot, status");
             len = 0;
         } else if (len < (int)sizeof line - 1) {
             line[len++] = c;
@@ -130,15 +163,22 @@ extern "C" void app_main(void) {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
         nvs_flash_erase();
-        nvs_flash_init();
+        err = nvs_flash_init();
     }
+    ESP_ERROR_CHECK(err);
     g_app.full_screen = true;   // defaults; saved settings override
+#if CONFIG_AAM_MOTORCYCLE
+    g_app.motorcycle = true;
+#endif
+    g_app.wifi_mode = 0;        // board hosts WiFi: phone hotspot is optional
     nvs_handle_t h;
     if (nvs_open("mininav", NVS_READONLY, &h) == ESP_OK) {
         uint8_t v = 0;
         if (nvs_get_u8(h, "night", &v) == ESP_OK) g_app.night = v;
         if (nvs_get_u8(h, "touch", &v) == ESP_OK) g_app.touch_enabled = v;
         if (nvs_get_u8(h, "full", &v) == ESP_OK) g_app.full_screen = v;
+        if (nvs_get_u8(h, "bike", &v) == ESP_OK) g_app.motorcycle = v != 0;
+        if (nvs_get_u8(h, "wifi_mode", &v) == ESP_OK && v <= 2) g_app.wifi_mode = v;
         nvs_close(h);
     }
     g_app.rotation = 1;

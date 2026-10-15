@@ -35,6 +35,8 @@ typedef struct {
     volatile bool demo;             // playing the built-in demo clip instead of the phone
     volatile bool touch_enabled;    // touch goes to Android Auto (setting, saved)
     volatile bool full_screen;      // hide Android Auto's app rail (setting, saved; needs touch off)
+    bool motorcycle;               // saved vehicle identity, defaults to motorcycle
+    int wifi_mode;                 // 0 board AP, 1 phone hotspot, 2 both
     volatile bool status_dirty;     // status screen needs a redraw
     volatile int rotation;          // LovyanGFX rotation, 1 or 3 (landscape)
     char phone_ip[16];
@@ -54,10 +56,14 @@ void app_toggle_night(const char *why);
 void app_toggle_demo(const char *why);
 void app_toggle_touch(const char *why);   // also shows/hides the rail: reconnects if connected
 void app_toggle_full(const char *why);    // only while touch is off
+void app_toggle_bike(const char *why);
+void app_cycle_wifi(const char *why);    // saved connection choice; restarts the board
 
 // board.cpp
 void board_init(void);
 void board_poll_inputs(void);          // BOOT button + IMU, call every ~10 ms
+void board_touch_diagnostics(bool toggle_test); // serial status / independent touch test
+bool board_touch_ready(void);
 uint16_t *display_acquire_frame(void); // 320x240 byte-swapped RGB565 buffer to fill
 void display_submit_frame(uint16_t *fb);
 void display_request_status(void);
@@ -68,6 +74,10 @@ bool sd_ready(void);
 // net.cpp
 void net_start(void);
 bool net_phone_ip(char *out, int len);  // latest phone IP, false if none
+bool net_phone_endpoint(char *out, int len, uint32_t *generation);
+bool net_link_valid(uint32_t generation); // false on disconnect, IP change or route switch
+void net_diagnostics(void);
+void net_set_streaming(bool active); // idle station sleep off before TCP/TLS
 
 // aap.cpp
 void aap_start(void);
