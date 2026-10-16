@@ -1,0 +1,52 @@
+{
+  "bar_diameter": 22.2,
+  "bar_straight_width": 40.0,
+  "liner_free_thickness": 1.0,
+  "liner_compressed_thickness": 0.8,
+  "clamp_split_gap": 2.0,
+  "rail_clearance": 0.3,
+  "board_face_z": 18.5,
+  "board_y_shift": 3.0,
+  "board_thread_diameter": 3.0,
+  "board_screw_length": 6.0,
+  "usb_center_x": -0.06,
+  "usb_center_z": 11.3305,
+  "usb_opening_width": 16.0,
+  "usb_opening_height": 9.0,
+  "plug_housing_width": 14.0,
+  "plug_housing_height": 7.0,
+  "plug_housing_length": 24.0,
+  "window_thickness": 0.5,
+  "window_adhesive_thickness": 0.2,
+  "bushing_barrel_od": 12.0,
+  "bushing_bore": 8.2,
+  "bushing_flange_od": 18.0,
+  "bushing_flange_free": 3.0,
+  "bushing_flange_compressed": 2.7,
+  "carrier_thickness": 6.0,
+  "sleeve_od": 8.0,
+  "sleeve_id": 5.3,
+  "sleeve_length": 11.4,
+  "thumb_head_diameter": 16.0,
+  "thumb_head_height": 9.5,
+  "thumb_screw_length": 16.0,
+  "thumb_cage_ceiling": 20.0,
+  "variants": {
+    "compact": {
+      "extra_depth": 0.0,
+      "hood_projection": 0.0,
+      "side_projection": 0.0
+    },
+    "sun": {
+      "extra_depth": 0.0,
+      "hood_projection": 18.0,
+      "side_projection": 10.0
+    },
+    "touring": {
+      "extra_depth": 5.0,
+      "hood_projection": 22.0,
+      "side_projection": 12.0
+    }
+  },
+  "washer_thickness": 1.1
+}
