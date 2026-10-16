@@ -1,0 +1,105 @@
+{
+  "original_compact_bounds_diagnosis": {
+    "exact_before": [
+      -45.0000001,
+      -37.0000001,
+      0.0,
+      45.0000001,
+      37.0000001,
+      6.000000100000001
+    ],
+    "old_default_after_export": [
+      -45.001903824630105,
+      -37.001903824630105,
+      -0.0013961647287453588,
+      45.001903824630105,
+      37.001903824630105,
+      8.98804790876494
+    ],
+    "exact_after": [
+      -45.0000001,
+      -37.0000001,
+      0.0,
+      45.0000001,
+      37.0000001,
+      6.000000100000001
+    ],
+    "mesh_bounds": [
+      [
+        -45.0,
+        -37.0,
+        0.0
+      ],
+      [
+        45.0,
+        37.0,
+        6.0
+      ]
+    ],
+    "mesh_watertight": true,
+    "mesh_components": 1,
+    "cad_volume_mm3": 11442.004995521027,
+    "mesh_volume_mm3": 11441.865313194823
+  },
+  "independent_gasket": {
+    "old_seat_intersections_mm3": [
+      1.0901662720306724,
+      1.090166272030673,
+      1.0901662720306105,
+      1.0901662720306051
+    ],
+    "old_total_mm3": 4.360665088122561,
+    "corrected_bezel_intersection_mm3": 0.0
+  },
+  "independent_finger": {
+    "old_straight_lip_corner_overlaps_mm3": [
+      107.3585107583594,
+      107.3585107583513,
+      107.35851069203414,
+      107.35851072838472
+    ],
+    "reviewed_bezel_corner_overlaps_mm3": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "common_metrics": {
+    "codex-work-models": {
+      "printable_stl_files": 22,
+      "sun_printed_pieces": 20,
+      "sun_printed_volume_mm3": {
+        "rigid": 163409.89968850822,
+        "TPU": 6823.42251310824
+      },
+      "case_face_mm": [
+        90,
+        74
+      ],
+      "assumed_straight_bar_mm": 35,
+      "glass_face_centre_above_bar_axis_mm": 68.95626680944665,
+      "removal_travel_to_clear_mm": 36.35
+    },
+    "assistant-models": {
+      "printable_stl_files": 23,
+      "sun_printed_pieces": 14,
+      "sun_printed_volume_mm3": {
+        "rigid": 222967.72417822084,
+        "TPU": 9041.902657974686
+      },
+      "case_face_mm": [
+        96,
+        78
+      ],
+      "assumed_straight_bar_mm": 40,
+      "glass_face_centre_above_bar_axis_mm": 67.5,
+      "removal_travel_to_clear_mm": 59
+    }
+  },
+  "limits": [
+    "Nominal CAD dimensions/volumes, not measured prints or strength evidence.",
+    "Rigid volume excludes hardware/board/seals; original TPU volume includes optional printed gasket, independent uses purchased silicone.",
+    "Metrics use sun variants, original 20-degree adapter; sightline is not a measured bike fit."
+  ]
+}

@@ -1,0 +1,1094 @@
+{
+  "status": "PASS",
+  "checks_passed": 33,
+  "checks_total": 33,
+  "checks": [
+    {
+      "name": "Exports match current source and parameters",
+      "pass": true,
+      "detail": "SHA-256 of CAD source and parameters at export"
+    },
+    {
+      "name": "All printable meshes",
+      "pass": true,
+      "detail": {
+        "count": 22,
+        "failed": []
+      }
+    },
+    {
+      "name": "Installed interference at 0 deg",
+      "pass": true,
+      "detail": {
+        "pairs": 2850,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Installed interference at 20 deg",
+      "pass": true,
+      "detail": {
+        "pairs": 2850,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Installed interference at 30 deg",
+      "pass": true,
+      "detail": {
+        "pairs": 2850,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Rear/front compact",
+      "pass": true,
+      "detail": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Rear/front sun",
+      "pass": true,
+      "detail": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Rear/front touring",
+      "pass": true,
+      "detail": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "16 mm spherical fingertip at LCD centre and corners",
+      "pass": true,
+      "detail": {
+        "samples": [
+          {
+            "style": "compact",
+            "point": [
+              -2.7,
+              0
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "sun",
+            "point": [
+              -2.7,
+              0
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "touring",
+            "point": [
+              -2.7,
+              0
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "compact",
+            "point": [
+              -31.5,
+              -21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "sun",
+            "point": [
+              -31.5,
+              -21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "touring",
+            "point": [
+              -31.5,
+              -21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "compact",
+            "point": [
+              -31.5,
+              21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "sun",
+            "point": [
+              -31.5,
+              21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "touring",
+            "point": [
+              -31.5,
+              21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "compact",
+            "point": [
+              26.1,
+              -21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "sun",
+            "point": [
+              26.1,
+              -21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "touring",
+            "point": [
+              26.1,
+              -21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "compact",
+            "point": [
+              26.1,
+              21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "sun",
+            "point": [
+              26.1,
+              21.6
+            ],
+            "overlap_mm3": 0.0
+          },
+          {
+            "style": "touring",
+            "point": [
+              26.1,
+              21.6
+            ],
+            "overlap_mm3": 0.0
+          }
+        ],
+        "note": "geometric access proxy only; touch response and human/gloved use untested"
+      }
+    },
+    {
+      "name": "Manufacturer conservative component keep-outs vs rear_shell",
+      "pass": true,
+      "detail": {
+        "tested_solids": 451,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Manufacturer conservative component keep-outs vs front_sun",
+      "pass": true,
+      "detail": {
+        "tested_solids": 451,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Rail removal +Y, 0..60 mm in 1 mm steps",
+      "pass": true,
+      "detail": {
+        "positions": 61,
+        "moving_parts": 2,
+        "fixed_obstacles": 5,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Case hardware removal sweep",
+      "pass": true,
+      "detail": {
+        "positions": 61,
+        "moving_parts": 13,
+        "collisions": [],
+        "shell_screw_head_to_track_top_gap_mm": 0.45
+      }
+    },
+    {
+      "name": "Captive screw withdrawal sweep",
+      "pass": true,
+      "detail": {
+        "positions": 37,
+        "step_mm": 0.25,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Rail free after 36.35 mm translation",
+      "pass": true,
+      "detail": {
+        "rail_length": 32,
+        "receiver_far_edge": 20.35,
+        "travel_required": 36.35,
+        "recommend_free_space_mm": 60
+      }
+    },
+    {
+      "name": "Sleeve compression limit",
+      "pass": true,
+      "detail": {
+        "free_stack_mm": 8.4,
+        "installed_stack_mm": 8,
+        "flange_compression_percent": 7.407407407407418
+      }
+    },
+    {
+      "name": "Isolation metal clear of rigid floating carrier",
+      "pass": true,
+      "detail": {
+        "sleeve_to_carrier_radial_gap_mm": 2.5,
+        "washer_to_carrier_axial_gap_mm": 2.5,
+        "washer_retention_overlap_mm": 2.5,
+        "down_stop_gap_mm": 1.5,
+        "sleeve_to_TPU_radial_gap_mm": 0.10000000000000009
+      }
+    },
+    {
+      "name": "Down stop onset",
+      "pass": true,
+      "detail": {
+        "contact_at_downward_mm": 1.5
+      }
+    },
+    {
+      "name": "Upper retention onset",
+      "pass": true,
+      "detail": {
+        "contact_at_upward_mm": 2.5
+      }
+    },
+    {
+      "name": "Lateral stop onset",
+      "pass": true,
+      "detail": {
+        "first_contact_plus_X_mm": 1.5,
+        "surface": "rail wall against retention washer edge; symmetric -X",
+        "sleeve_radial_clearance_mm": 2.5
+      }
+    },
+    {
+      "name": "Continuous gasket fits rear groove",
+      "pass": true,
+      "detail": {
+        "components": 1,
+        "groove_width_mm": 1.8,
+        "gasket_width_mm": 1.6,
+        "per_side_lateral_clearance_mm": 0.1,
+        "compression_percent": 25
+      }
+    },
+    {
+      "name": "USB below continuous gasket",
+      "pass": true,
+      "detail": {
+        "minimum_vertical_web_mm": 1.2695000000000003
+      }
+    },
+    {
+      "name": "USB 14x6 mm housing insertion sweep",
+      "pass": true,
+      "detail": {
+        "housing_swept_x_mm": [
+          35.28,
+          53.28
+        ],
+        "wall_outer_x": 45,
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Six case screw tool approaches",
+      "pass": true,
+      "detail": {
+        "driver_diameter_mm": 5.5,
+        "collisions": [],
+        "condition": "case detached; tool approaches from rear"
+      }
+    },
+    {
+      "name": "External insert separates from cavity",
+      "pass": true,
+      "detail": {
+        "vertical_separation_mm": 6.199999999999999,
+        "insert_engagement_mm": 6,
+        "screw_tip_blind_clearance_mm": 1
+      }
+    },
+    {
+      "name": "Clamp driver and nut socket access",
+      "pass": true,
+      "detail": {
+        "socket_envelope_diameter_mm": 9,
+        "maximum_overlap_mm3": 0.0,
+        "stage": "adapter removed"
+      }
+    },
+    {
+      "name": "Isolation nut socket access",
+      "pass": true,
+      "detail": {
+        "socket_envelope_diameter_mm": 9,
+        "counterbore_diameter_mm": 10,
+        "maximum_overlap_mm3": 0.0,
+        "stage": "case detached; socket below wedge, outside clamp width"
+      }
+    },
+    {
+      "name": "Fastener thread engagement",
+      "pass": true,
+      "detail": {
+        "case_M3_nut_mm": 2.2,
+        "release_M4_insert_mm": 6,
+        "adapter_M4_nut_mm": 3.2,
+        "isolator_M3_nyloc_mm": 4,
+        "clamp_M4_nyloc_mm": 5,
+        "M3_isolator_protrusion_mm": 2.7,
+        "M4_clamp_protrusion_mm": 5.4,
+        "note": "nominal screw lengths; verify delivered hardware and printed seating before use"
+      }
+    },
+    {
+      "name": "Nominal shell structural sections",
+      "pass": true,
+      "detail": {
+        "floor_mm": 2.5,
+        "bezel_mm": 2.5,
+        "hood_mm": 2.4,
+        "tongue_min_wall_mm": 1.379999999999999,
+        "tongue_socket_clearance_per_side_mm": 0.3,
+        "tongue_overlap_mm": 2,
+        "groove_USB_web_mm": 1.2695000000000003,
+        "front_nut_roof_mm": 1.3,
+        "blind_screw_roof_mm": 1.2,
+        "carrier_mm": 3,
+        "rail_floor_mm": 2.65
+      }
+    },
+    {
+      "name": "Captive release geometry",
+      "pass": true,
+      "detail": {
+        "flange_diameter_mm": 22,
+        "front_aperture_mm": 18.6,
+        "radial_capture_mm": 1.7,
+        "axial_release_travel_mm": 9,
+        "screw_tip_released_y": -19,
+        "rail_near_face_y": -16,
+        "head_positive_cover": "two M2x6 screws",
+        "keeper_fasteners": "four M3x10 screws"
+      }
+    },
+    {
+      "name": "Clamp liner and split gap",
+      "pass": true,
+      "detail": {
+        "ASSUMED_bar_diameter_mm": 22.2,
+        "straight_bar_minimum_mm": 35.0,
+        "split_gap_mm": 1.0,
+        "free_liner_mm": 1.0,
+        "installed_liner_mm": 0.8,
+        "liner_compression_percent": 20
+      }
+    },
+    {
+      "name": "Original preserved MiniNav-Frame-with-button.stl",
+      "pass": true,
+      "detail": "81ea3e4ac43428d953742b317cc0462f1be3008bd1b2517be56fc48069834902"
+    },
+    {
+      "name": "Original preserved MiniNav-back-panel-with-strap-slits.stl",
+      "pass": true,
+      "detail": "aa613461c9aa7788da97889b617161bbe09f407006efcf66ef158b8e5e236d27"
+    }
+  ],
+  "meshes": [
+    {
+      "part": "front_compact",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 11441.865313194823,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -45.0,
+          -37.0,
+          0.0
+        ],
+        [
+          45.0,
+          37.0,
+          6.0
+        ]
+      ],
+      "dimensions_mm": [
+        90.0,
+        74.0,
+        6.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "c959472830c1ada6e214213a26222139edbc1a044a849e6b5ac9876ac93719c2",
+      "bounds_error_mm": 1.0000000116860974e-07,
+      "relative_volume_error": 1.2207853978265985e-05,
+      "triangles": 5276
+    },
+    {
+      "part": "front_sun",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 16507.481747711354,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -45.0,
+          -37.0,
+          0.0
+        ],
+        [
+          45.0,
+          37.0,
+          24.0
+        ]
+      ],
+      "dimensions_mm": [
+        90.0,
+        74.0,
+        24.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "fabe5783d0de5a39fe57ef5115d26a86e568ade3d46b7f5d0d1233a5e819691b",
+      "bounds_error_mm": 1.0000000116860974e-07,
+      "relative_volume_error": 5.554060441706886e-06,
+      "triangles": 5316
+    },
+    {
+      "part": "front_touring",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 18597.40304714981,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -45.0,
+          -37.0,
+          0.0
+        ],
+        [
+          45.0,
+          37.0,
+          31.0
+        ]
+      ],
+      "dimensions_mm": [
+        90.0,
+        74.0,
+        31.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "68de59d53b6006d195ca0399a12ad0e5bb61bf94a6f87e5985ddc22a30999df1",
+      "bounds_error_mm": 1.0000000116860974e-07,
+      "relative_volume_error": 4.860048579209631e-06,
+      "triangles": 5316
+    },
+    {
+      "part": "rear_shell",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 52950.75032101067,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -49.0,
+          -37.0,
+          0.0
+        ],
+        [
+          49.0,
+          37.0,
+          24.0
+        ]
+      ],
+      "dimensions_mm": [
+        98.0,
+        74.0,
+        24.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "79d7350efd0a85453d068ea85238a03d63136c00804934d7ba2fe606cda79f7c",
+      "bounds_error_mm": 0.0,
+      "relative_volume_error": 1.3464013132579375e-07,
+      "triangles": 8084
+    },
+    {
+      "part": "seam_gasket",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 521.5307834242275,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -41.20000076293945,
+          -30.200000762939453,
+          0.0
+        ],
+        [
+          41.20000076293945,
+          30.200000762939453,
+          1.2000000476837158
+        ]
+      ],
+      "dimensions_mm": [
+        82.4000015258789,
+        60.400001525878906,
+        1.2000000476837158
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "3da38f4d1b946bf663b7ef3cdc8c6dc481369ea6eb7f651bf68295746026fed3",
+      "bounds_error_mm": 7.629394538355427e-07,
+      "relative_volume_error": 5.668768888260003e-05,
+      "triangles": 896
+    },
+    {
+      "part": "floating_carrier",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 27151.335242374018,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -39.0,
+          -40.0,
+          0.0
+        ],
+        [
+          39.0,
+          40.0,
+          23.0
+        ]
+      ],
+      "dimensions_mm": [
+        78.0,
+        80.0,
+        23.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "e12a95a504fd94ffe68f55b8b3cc62da9143241daddcae139dae6b4d4776d7b9",
+      "bounds_error_mm": 0.0,
+      "relative_volume_error": 2.0381285527694336e-05,
+      "triangles": 4740
+    },
+    {
+      "part": "cage_front",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 1434.8852128704366,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -17.0,
+          -11.5,
+          -1.0320452717253736e-15
+        ],
+        [
+          17.0,
+          11.5,
+          3.0
+        ]
+      ],
+      "dimensions_mm": [
+        34.0,
+        23.0,
+        3.000000000000001
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "2b39aa3c0ba7c0d53bb1acea19916a39b50897f34e4d09dc052432f741f23099",
+      "bounds_error_mm": 2.6645352591003757e-15,
+      "relative_volume_error": 0.00037925774222632373,
+      "triangles": 2132
+    },
+    {
+      "part": "thumbwheel",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 2449.6041152207204,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -10.99876880645752,
+          -11.0,
+          -9.833956167624677e-16
+        ],
+        [
+          10.99876880645752,
+          10.995077133178711,
+          11.0
+        ]
+      ],
+      "dimensions_mm": [
+        21.99753761291504,
+        21.99507713317871,
+        11.000000000000002
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "897676b848a10c800731fd97d688a8764b8d3d5f7dddef8da30dff710cc84342",
+      "bounds_error_mm": 0.004922866821290839,
+      "relative_volume_error": 0.0003756201890061671,
+      "triangles": 4392
+    },
+    {
+      "part": "thumbwheel_cap",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 493.43809530793595,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -8.998992919921875,
+          -9.0,
+          -9.987534887664906e-16
+        ],
+        [
+          8.998992919921875,
+          8.9959716796875,
+          2.0
+        ]
+      ],
+      "dimensions_mm": [
+        17.99798583984375,
+        17.9959716796875,
+        2.000000000000001
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "cfc6c7c5e900eac84e45816ea8cea820b6f73a3ef9325e8925a17344290ebf4d",
+      "bounds_error_mm": 0.004028320312501776,
+      "relative_volume_error": 0.0005966915486412906,
+      "triangles": 1264
+    },
+    {
+      "part": "bushing_half",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 448.4082526381599,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -6.9968671798706055,
+          -6.999216556549072,
+          0.0
+        ],
+        [
+          7.0,
+          6.999216556549072,
+          4.199999809265137
+        ]
+      ],
+      "dimensions_mm": [
+        13.996867179870605,
+        13.998433113098145,
+        4.199999809265137
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "7107c55e351c3638642ee39d38f48fc47285b51d56706b312a1e3b758cbc2d2f",
+      "bounds_error_mm": 0.0031328201293945312,
+      "relative_volume_error": 0.0005967044691488742,
+      "triangles": 1260
+    },
+    {
+      "part": "clamp_upper",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 10286.96933725027,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -9.699999809265137,
+          -22.899999618530273,
+          1.0000000116860974e-07
+        ],
+        [
+          9.699999809265137,
+          22.899999618530273,
+          32.0
+        ]
+      ],
+      "dimensions_mm": [
+        19.399999618530273,
+        45.79999923706055,
+        31.9999999
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "1085823f954bdab660e7de5dd8394d9d1faa427362f7e70a9076f8bb6c38074c",
+      "bounds_error_mm": 3.8146972514141453e-07,
+      "relative_volume_error": 0.00011809589268768918,
+      "triangles": 5660
+    },
+    {
+      "part": "clamp_lower",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 9219.914829555544,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -8.699999809265137,
+          -22.899999618530273,
+          1.0000000116860974e-07
+        ],
+        [
+          8.699999809265137,
+          22.899999618530273,
+          32.0
+        ]
+      ],
+      "dimensions_mm": [
+        17.399999618530273,
+        45.79999923706055,
+        31.9999999
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "7dfbab9c9bcd229be8f90c48940963dfd4e7d6b7513fac11cd5ea9f10e1ee7f8",
+      "bounds_error_mm": 3.8146972514141453e-07,
+      "relative_volume_error": 0.000208044751481364,
+      "triangles": 3992
+    },
+    {
+      "part": "liner_half",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 1355.3996492802423,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -6.300000190734863,
+          -13.0904541015625,
+          0.0
+        ],
+        [
+          6.300000190734863,
+          13.0904541015625,
+          35.0
+        ]
+      ],
+      "dimensions_mm": [
+        12.600000381469727,
+        26.180908203125,
+        35.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "4decadcab5ddcd8b8511fe80945c83424587387401f5d03929e19334491dc20f",
+      "bounds_error_mm": 4.360003575953897e-07,
+      "relative_volume_error": 0.0006101589447000516,
+      "triangles": 836
+    },
+    {
+      "part": "angle_adapter_00",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 26511.794270387745,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -39.0,
+          -28.0,
+          0.0
+        ],
+        [
+          39.0,
+          28.0,
+          9.0
+        ]
+      ],
+      "dimensions_mm": [
+        78.0,
+        56.0,
+        9.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "411e3d1c354ec96771f6a2ed6b88a2d9ef433e56a41bd16028e8e5081e31fd63",
+      "bounds_error_mm": 0.0,
+      "relative_volume_error": 1.0857847185597487e-05,
+      "triangles": 7436
+    },
+    {
+      "part": "angle_adapter_20",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 42914.44769530684,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -39.0,
+          -28.0,
+          1.865174681370263e-14
+        ],
+        [
+          39.0,
+          28.0,
+          27.767730712890625
+        ]
+      ],
+      "dimensions_mm": [
+        78.0,
+        56.0,
+        27.767730712890607
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "025002a72e037eaa89be9a67009341ed264f8de98f8102fc9037e7d96ca4b7d2",
+      "bounds_error_mm": 1.4031821393700739e-07,
+      "relative_volume_error": 3.558464921841849e-06,
+      "triangles": 7880
+    },
+    {
+      "part": "angle_adapter_30",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 50866.338306515536,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -39.0,
+          -28.0,
+          0.0
+        ],
+        [
+          39.0,
+          28.0,
+          38.16580581665039
+        ]
+      ],
+      "dimensions_mm": [
+        78.0,
+        56.0,
+        38.16580581665039
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "de5af75a593dd086db54dcd16138a0e66058a6d6371fec5bca8dbdb69095b134",
+      "bounds_error_mm": 1.7206591280682915e-06,
+      "relative_volume_error": 1.134257921049718e-05,
+      "triangles": 8204
+    },
+    {
+      "part": "coupon_rail_male",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 3156.0,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -15.0,
+          -6.0,
+          0.0
+        ],
+        [
+          15.0,
+          6.0,
+          10.5
+        ]
+      ],
+      "dimensions_mm": [
+        30.0,
+        12.0,
+        10.5
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "5488e144908fdbe1fef0b2218f3ee784c33a857180bee4bdaf948e2eae4ef00a",
+      "bounds_error_mm": 8.881784197001252e-16,
+      "relative_volume_error": 1.4408978164970345e-16,
+      "triangles": 20
+    },
+    {
+      "part": "coupon_rail_female_0p2",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 2610.3601091766373,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -19.5,
+          -6.0,
+          0.0
+        ],
+        [
+          19.5,
+          6.0,
+          11.350000381469727
+        ]
+      ],
+      "dimensions_mm": [
+        39.0,
+        12.0,
+        11.350000381469727
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "dccbbb2f899556e2a89546b7729d382961b52610bfac6c9353b6b9620df1dacb",
+      "bounds_error_mm": 3.8146972514141453e-07,
+      "relative_volume_error": 4.1824360115030906e-08,
+      "triangles": 36
+    },
+    {
+      "part": "coupon_rail_female_0p35",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 2524.320007209775,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -19.5,
+          -6.0,
+          0.0
+        ],
+        [
+          19.5,
+          6.0,
+          11.350000381469727
+        ]
+      ],
+      "dimensions_mm": [
+        39.0,
+        12.0,
+        11.350000381469727
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "dbdb0fa5bd764539e4aca0311d6df5d87e0fe6c611a4065c3b85ffdcdfa1d3a6",
+      "bounds_error_mm": 3.814697233650577e-07,
+      "relative_volume_error": 2.8561258096140006e-09,
+      "triangles": 28
+    },
+    {
+      "part": "coupon_rail_female_0p5",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 2437.3200613784793,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -19.5,
+          -6.0,
+          0.0
+        ],
+        [
+          19.5,
+          6.0,
+          11.350000381469727
+        ]
+      ],
+      "dimensions_mm": [
+        39.0,
+        12.0,
+        11.350000381469727
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "72fd99fcd3ff477025fafc0da2514839657dda675801c1f45fc8504a7a52aba5",
+      "bounds_error_mm": 3.814697233650577e-07,
+      "relative_volume_error": 2.5182774166394033e-08,
+      "triangles": 28
+    },
+    {
+      "part": "coupon_usb_plug",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 770.5805374971782,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -12.0,
+          -8.0,
+          0.0
+        ],
+        [
+          12.0,
+          8.0,
+          3.0
+        ]
+      ],
+      "dimensions_mm": [
+        24.0,
+        16.0,
+        3.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "3b66f3fa0759ebf8312d260419bfe03b6692c015d6d8cfb9206a807cdfcd2f0c",
+      "bounds_error_mm": 1.7763568394002505e-15,
+      "relative_volume_error": 6.898039017906667e-06,
+      "triangles": 464
+    },
+    {
+      "part": "coupon_holes_insert",
+      "pass": true,
+      "watertight": true,
+      "consistent_winding": true,
+      "positive_volume_mm3": 2933.657672417806,
+      "components": 1,
+      "bounds_mm": [
+        [
+          -19.0,
+          -9.0,
+          0.0
+        ],
+        [
+          19.0,
+          9.0,
+          5.0
+        ]
+      ],
+      "dimensions_mm": [
+        38.0,
+        18.0,
+        5.0
+      ],
+      "source_bounds_error_mm": 0.0,
+      "sha256": "a3dbe70f6405eb41dd28db2329cb6114bbd551aed1c597e55864cd78a99dc00d",
+      "bounds_error_mm": 0.0,
+      "relative_volume_error": 9.899014660294642e-05,
+      "triangles": 1284
+    }
+  ],
+  "limitations": [
+    "No physical prints, fit, material, sealing, touch, thermal, vibration, fatigue or road tests performed.",
+    "Bounding boxes from manufacturer 2024 STEP, not a scan of the user board.",
+    "No load rating, waterproof certification or measured vibration reduction.",
+    "Motion samples are 1 mm apart; constant extruded rail sections and clear removal direction also reviewed analytically."
+  ]
+}

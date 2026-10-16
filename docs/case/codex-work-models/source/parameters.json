@@ -1,0 +1,53 @@
+{
+  "bar_diameter": 22.2,
+  "clamp_width": 32.0,
+  "clamp_split_gap": 1.0,
+  "liner_free_thickness": 1.0,
+  "liner_installed_thickness": 0.8,
+  "clamp_wall": 6.0,
+  "default_angle_degrees": 20,
+  "adapter_angles": [
+    0,
+    20,
+    30
+  ],
+  "case_width": 90.0,
+  "case_height": 74.0,
+  "glass_width": 73.06,
+  "glass_height": 50.54,
+  "electronics_xy_clearance": 0.6,
+  "case_back_z": -15.0,
+  "case_floor_thickness": 2.5,
+  "seam_z": -1.5,
+  "glass_front_z": -0.5,
+  "window_aperture_width": 61.4,
+  "window_aperture_height": 47.0,
+  "window_center_x": -2.7,
+  "window_film_width": 68.0,
+  "window_film_height": 52.4,
+  "window_film_thickness": 0.2,
+  "window_adhesive_thickness": 0.15,
+  "usb_center_y": -0.06,
+  "usb_center_z": -7.6695,
+  "usb_opening_width": 16.0,
+  "usb_opening_height": 8.0,
+  "rail_clearance": 0.35,
+  "insert_diameter": 5.6,
+  "insert_length": 6.0,
+  "hood_projection": {
+    "compact": 0,
+    "sun": 18,
+    "touring": 25
+  },
+  "hood_side_projection": {
+    "compact": 0,
+    "sun": 8,
+    "touring": 12
+  },
+  "bushing_free_flange": 2.7,
+  "bushing_installed_flange": 2.5,
+  "bushing_bore": 4.2,
+  "sleeve_od": 4.0,
+  "sleeve_id": 3.2,
+  "sleeve_length": 8.0
+}

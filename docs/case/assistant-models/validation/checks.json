@@ -1,0 +1,1603 @@
+{
+  "checks": [
+    {
+      "name": "Exports match current source and parameters",
+      "pass": true,
+      "evidence": "SHA-256 captured during export"
+    },
+    {
+      "name": "CAD clamp_upper_base",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 45668.31173184439
+      }
+    },
+    {
+      "name": "STL clamp_upper_base",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 45671.3710271509,
+        "extents_mm": [
+          80.0,
+          35.70000076293945,
+          66.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 7.629394502828291e-07,
+        "relative_volume_error": 6.698945484277368e-05,
+        "sha256": "a4fccd9b4723fd9f45582c79100b5fd012e5891e6ae2e4b60673fb0cc745b272"
+      }
+    },
+    {
+      "name": "CAD clamp_lower",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 16253.423084694019
+      }
+    },
+    {
+      "name": "STL clamp_lower",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 16253.361076960822,
+        "extents_mm": [
+          55.0,
+          15.899999618530273,
+          39.9999999
+        ],
+        "minimum_z": 1.0000000116860974e-07,
+        "bounds_error_mm": 4.814697263100243e-07,
+        "relative_volume_error": 3.815056857485724e-06,
+        "sha256": "c20ebfcf94fb43607c19d4903f597afc13996af44d2ed2927eec5e45386942a0"
+      }
+    },
+    {
+      "name": "CAD carrier",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 62994.61502440053
+      }
+    },
+    {
+      "name": "STL carrier",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 63001.03282553962,
+        "extents_mm": [
+          80.0,
+          99.0,
+          18.700000762939453
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 7.629394538355427e-07,
+        "relative_volume_error": 0.00010187856750302469,
+        "sha256": "17ae0baa567ebb598d07b77ea6f24bf498bd97d39269515e36c43d7dae64d7ec"
+      }
+    },
+    {
+      "name": "CAD captive_cap",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1282.5571133943552
+      }
+    },
+    {
+      "name": "STL captive_cap",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1282.795499010631,
+        "extents_mm": [
+          32.0,
+          18.0,
+          3.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 0.00018586744698243003,
+        "sha256": "5c2661622a6323123feff82f78549668370f8d37fce3a9e0275481c6fc063dc2"
+      }
+    },
+    {
+      "name": "CAD nut_keeper",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 377.054870393784
+      }
+    },
+    {
+      "name": "STL nut_keeper",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 377.0769152962078,
+        "extents_mm": [
+          3.0,
+          23.0,
+          6.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 5.84660328105726e-05,
+        "sha256": "4b8230c09e7a70458211e6e0736d9f1297b1438fdb3be6f29486988c2d581205"
+      }
+    },
+    {
+      "name": "CAD board_tray",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 5127.825644034237
+      }
+    },
+    {
+      "name": "STL board_tray",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 5127.785843222026,
+        "extents_mm": [
+          59.59768390574027,
+          72.0,
+          3.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0023160942597328926,
+        "relative_volume_error": 7.761732744650696e-06,
+        "sha256": "b14f8f53589c0deffe61f666a5001b278f4724f50948fea54427811a47d3a568"
+      }
+    },
+    {
+      "name": "CAD tpu_bushing",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1571.6759727379022
+      }
+    },
+    {
+      "name": "STL tpu_bushing",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1570.7381545224755,
+        "extents_mm": [
+          17.995971890632063,
+          17.997985836234875,
+          12.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.00402810936793685,
+        "relative_volume_error": 0.0005966994671255011,
+        "sha256": "10608ad26b278d16fb79736be1bf2a6ea9fb6583acc236b0a8d5ab77e809713d"
+      }
+    },
+    {
+      "name": "CAD tpu_liner_upper",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1377.5993835115396
+      }
+    },
+    {
+      "name": "STL tpu_liner_upper",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1376.7191926961084,
+        "extents_mm": [
+          24.11721420288086,
+          11.100000381469725,
+          40.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 4.3345881550749255e-07,
+        "relative_volume_error": 0.0006389309010777682,
+        "sha256": "acb238243855e40f80a4f3fb4c64894f1021086ac3456d24a4835244358f359a"
+      }
+    },
+    {
+      "name": "CAD tpu_liner_lower",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1377.5993835115369
+      }
+    },
+    {
+      "name": "STL tpu_liner_lower",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1376.7191816959773,
+        "extents_mm": [
+          24.11721420288086,
+          11.100000381469727,
+          40.0
+        ],
+        "minimum_z": 1.65302979519209e-15,
+        "bounds_error_mm": 4.3345881550749255e-07,
+        "relative_volume_error": 0.0006389388860757713,
+        "sha256": "3b79d5b97328c2970592fb98b0c06f5895b7c81b55f47ff8cf75c0eadd250f6b"
+      }
+    },
+    {
+      "name": "CAD coupon_rail_male",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1495.9999999999995
+      }
+    },
+    {
+      "name": "STL coupon_rail_male",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1496.0,
+        "extents_mm": [
+          16.0,
+          22.0,
+          8.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 3.039755019294547e-16,
+        "sha256": "bc97adb41d4570b344bbf745040bd179475f6333d1bab52f3a54faa4e3f1056a"
+      }
+    },
+    {
+      "name": "CAD coupon_holes",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 6839.172375771945
+      }
+    },
+    {
+      "name": "STL coupon_holes",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 6839.38771060132,
+        "extents_mm": [
+          60.0,
+          20.0,
+          6.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 3.1485509875121264e-05,
+        "sha256": "7706b2a2d38440ecccf94c1db27c06ba549a3d155e455cf9bf3a029f1ec99f20"
+      }
+    },
+    {
+      "name": "CAD coupon_usb_plug",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 792.0
+      }
+    },
+    {
+      "name": "STL coupon_usb_plug",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 792.0,
+        "extents_mm": [
+          24.0,
+          3.0,
+          17.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 0.0,
+        "sha256": "1644ae783ead1aedc344af32961fbb89e2f739feef9f9f8b5ae8097d72c7c008"
+      }
+    },
+    {
+      "name": "CAD coupon_isolator",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 3979.4230703760495
+      }
+    },
+    {
+      "name": "STL coupon_isolator",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 3979.8554127429466,
+        "extents_mm": [
+          28.0,
+          28.0,
+          6.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 0.00010864448420061821,
+        "sha256": "ff6fdc14bdfaab8299c1ee402dc5635ded0694f441749753d4942b78b9aa5282"
+      }
+    },
+    {
+      "name": "CAD coupon_rail_0.2",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1856.16
+      }
+    },
+    {
+      "name": "STL coupon_rail_0.2",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1856.1600345039378,
+        "extents_mm": [
+          16.0,
+          18.0,
+          9.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 1.858888120675882e-08,
+        "sha256": "4c6b22175835d6bff179e79d5527eab01c47b98de2734b560860288f542bd90b"
+      }
+    },
+    {
+      "name": "CAD coupon_rail_0.3",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1811.16
+      }
+    },
+    {
+      "name": "STL coupon_rail_0.3",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1811.159965839387,
+        "extents_mm": [
+          16.0,
+          18.0,
+          9.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 1.886117904575661e-08,
+        "sha256": "285dd7c4e4a7d121938a22e0740259f4fcaead4360f375519fc4966db85d4a35"
+      }
+    },
+    {
+      "name": "CAD coupon_rail_0.4",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 1765.4399999999998
+      }
+    },
+    {
+      "name": "STL coupon_rail_0.4",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 1765.4400109863288,
+        "extents_mm": [
+          16.0,
+          18.0,
+          9.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 6.222997675539701e-09,
+        "sha256": "ff211fcb38be9c7d7ace1f76338e35a9aa623ca4ca6729880096bd05ec433b21"
+      }
+    },
+    {
+      "name": "CAD rear_compact",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 72892.41615368874
+      }
+    },
+    {
+      "name": "STL rear_compact",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 72891.52135507892,
+        "extents_mm": [
+          87.0,
+          114.0,
+          26.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 1.2275606394146504e-05,
+        "sha256": "e4f22ae2ae946726e75237057d42741e95bab763b685818d29f7b9f731ca26b5"
+      }
+    },
+    {
+      "name": "CAD bezel_compact",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 12823.73389546667
+      }
+    },
+    {
+      "name": "STL bezel_compact",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 12823.574018416584,
+        "extents_mm": [
+          77.9999999,
+          95.9999999,
+          4.5
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 2.9999999640040187e-07,
+        "relative_volume_error": 1.2467277579928795e-05,
+        "sha256": "dcba7ec12b878431883f7d94ecf865fbc1dfc1f0b54ee272bf9c9c571e42d709"
+      }
+    },
+    {
+      "name": "CAD rear_sun",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 72892.41615368874
+      }
+    },
+    {
+      "name": "STL rear_sun",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 72891.52135507892,
+        "extents_mm": [
+          87.0,
+          114.0,
+          26.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 1.2275606394146504e-05,
+        "sha256": "e4f22ae2ae946726e75237057d42741e95bab763b685818d29f7b9f731ca26b5"
+      }
+    },
+    {
+      "name": "CAD bezel_sun",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 18371.520555770796
+      }
+    },
+    {
+      "name": "STL bezel_sun",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 18371.631054311958,
+        "extents_mm": [
+          78.0,
+          95.9999999,
+          22.5
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 2.9999999640040187e-07,
+        "relative_volume_error": 6.014664971614336e-06,
+        "sha256": "4521345a6999d6f804ade6d7b2d6badcbdbb0dc8ef137e6d7b915639ec3aafd6"
+      }
+    },
+    {
+      "name": "CAD rear_touring",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 88283.04469581797
+      }
+    },
+    {
+      "name": "STL rear_touring",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 88281.53187024606,
+        "extents_mm": [
+          87.0,
+          114.0,
+          30.5
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0,
+        "relative_volume_error": 1.7136082892420433e-05,
+        "sha256": "5415b4faf132f9ed3742e9d93f0b2ef0c32dc11dea72826e40e6c5eb04d22aae"
+      }
+    },
+    {
+      "name": "CAD bezel_touring",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 19584.005141131856
+      }
+    },
+    {
+      "name": "STL bezel_touring",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 19584.16801665859,
+        "extents_mm": [
+          78.0,
+          95.9999999,
+          26.5
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 2.9999999640040187e-07,
+        "relative_volume_error": 8.316762866435225e-06,
+        "sha256": "ff4ab1f097dcf9a625a7625dd547ea8ebe1e887b4074d402de5aef629435b370"
+      }
+    },
+    {
+      "name": "CAD board_tray_touring",
+      "pass": true,
+      "evidence": {
+        "valid": true,
+        "solids": 1,
+        "volume_mm3": 5127.825644034237
+      }
+    },
+    {
+      "name": "STL board_tray_touring",
+      "pass": true,
+      "evidence": {
+        "watertight": true,
+        "components": 1,
+        "volume_mm3": 5127.785843222026,
+        "extents_mm": [
+          59.59768390574027,
+          72.0,
+          3.0
+        ],
+        "minimum_z": 0.0,
+        "bounds_error_mm": 0.0023160942597328926,
+        "relative_volume_error": 7.761732744650696e-06,
+        "sha256": "b14f8f53589c0deffe61f666a5001b278f4724f50948fea54427811a47d3a568"
+      }
+    },
+    {
+      "name": "compact vendor board vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact vendor board vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact vendor board vs tray",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact vendor board vs window",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact rear vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact rear vs tray",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact gasket vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact gasket vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact window vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact adhesive vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact rear vs carrier",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact cap vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact fully inserted assumed plug housing vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact fully inserted assumed plug housing vs board",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact plug insertion sweep vs case",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact populated tray installation sweep",
+      "pass": true,
+      "evidence": {
+        "max_intersection_mm3": 0.0,
+        "tray_z_samples": 16,
+        "board_sweep": "continuous union of 451 conservative component boxes over +30 mm"
+      }
+    },
+    {
+      "name": "compact case driver 1",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact case driver 2",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact case driver 3",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact case driver 4",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact closure screw head clearance",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact 16 mm fingertip at LCD centre and corners",
+      "pass": true,
+      "evidence": {
+        "overlaps_mm3": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scope": "geometric proxy, not a human/glove/touch test"
+      }
+    },
+    {
+      "name": "compact normal viewing prism",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "compact USB roof web",
+      "pass": true,
+      "evidence": {
+        "minimum_mm": 1.6694999999999993
+      }
+    },
+    {
+      "name": "sun vendor board vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun vendor board vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun vendor board vs tray",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun vendor board vs window",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun rear vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun rear vs tray",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun gasket vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun gasket vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun window vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun adhesive vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun rear vs carrier",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun cap vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun fully inserted assumed plug housing vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun fully inserted assumed plug housing vs board",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun plug insertion sweep vs case",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun populated tray installation sweep",
+      "pass": true,
+      "evidence": {
+        "max_intersection_mm3": 0.0,
+        "tray_z_samples": 16,
+        "board_sweep": "continuous union of 451 conservative component boxes over +30 mm"
+      }
+    },
+    {
+      "name": "sun case driver 1",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun case driver 2",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun case driver 3",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun case driver 4",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun closure screw head clearance",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun 16 mm fingertip at LCD centre and corners",
+      "pass": true,
+      "evidence": {
+        "overlaps_mm3": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scope": "geometric proxy, not a human/glove/touch test"
+      }
+    },
+    {
+      "name": "sun normal viewing prism",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "sun USB roof web",
+      "pass": true,
+      "evidence": {
+        "minimum_mm": 1.6694999999999993
+      }
+    },
+    {
+      "name": "touring vendor board vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring vendor board vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring vendor board vs tray",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring vendor board vs window",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring rear vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring rear vs tray",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring gasket vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring gasket vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring window vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring adhesive vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring rear vs carrier",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring cap vs bezel",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring fully inserted assumed plug housing vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring fully inserted assumed plug housing vs board",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring plug insertion sweep vs case",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring populated tray installation sweep",
+      "pass": true,
+      "evidence": {
+        "max_intersection_mm3": 0.0,
+        "tray_z_samples": 16,
+        "board_sweep": "continuous union of 451 conservative component boxes over +30 mm"
+      }
+    },
+    {
+      "name": "touring case driver 1",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring case driver 2",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring case driver 3",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring case driver 4",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring closure screw head clearance",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring 16 mm fingertip at LCD centre and corners",
+      "pass": true,
+      "evidence": {
+        "overlaps_mm3": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scope": "geometric proxy, not a human/glove/touch test"
+      }
+    },
+    {
+      "name": "touring normal viewing prism",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "touring USB roof web",
+      "pass": true,
+      "evidence": {
+        "minimum_mm": 1.6694999999999993
+      }
+    },
+    {
+      "name": "compact installed non-electronic assembly pairs",
+      "pass": true,
+      "evidence": {
+        "pairs": 3240,
+        "collisions": []
+      }
+    },
+    {
+      "name": "sun installed non-electronic assembly pairs",
+      "pass": true,
+      "evidence": {
+        "pairs": 3240,
+        "collisions": []
+      }
+    },
+    {
+      "name": "touring installed non-electronic assembly pairs",
+      "pass": true,
+      "evidence": {
+        "pairs": 3240,
+        "collisions": []
+      }
+    },
+    {
+      "name": "Rail insertion / removal sweep",
+      "pass": true,
+      "evidence": {
+        "samples": 63,
+        "max_intersection_mm3": 0,
+        "bad_samples": []
+      }
+    },
+    {
+      "name": "Thumb withdrawal clears nose",
+      "pass": true,
+      "evidence": {
+        "head_travel_mm": 10.5,
+        "withdrawn_tip_z": -5.5,
+        "nose_top_z": -7,
+        "clearance_mm": 1.5
+      }
+    },
+    {
+      "name": "Thumb remains captive",
+      "pass": true,
+      "evidence": {
+        "head_diameter": 16.0,
+        "cap_aperture": 13,
+        "post_inside_width": 18
+      }
+    },
+    {
+      "name": "Full captive thumbscrew retraction sweep",
+      "pass": true,
+      "evidence": {
+        "samples": 43,
+        "max_overlap_mm3": 0.0
+      }
+    },
+    {
+      "name": "Thumb tightened shaft vs rear",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Thumb tightened head vs cage",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Thumb withdrawn vs carrier",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Rigid carrier vs fixed base",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 1 vs rigid carrier (tangent contact)",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 1 vs sleeve",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 1 vs base",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 2 vs rigid carrier (tangent contact)",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 2 vs sleeve",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 2 vs base",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 3 vs rigid carrier (tangent contact)",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 3 vs sleeve",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 3 vs base",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 4 vs rigid carrier (tangent contact)",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 4 vs sleeve",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Bushing 4 vs base",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 1",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 2",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 3",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 4",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 5",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 6",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 7",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 8",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 9",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 10",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 11",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 12",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 13",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 14",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 15",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "No rigid isolation bypass 16",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Travel stop free at rest 1",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Travel stop free at rest 2",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Travel stop free at rest 3",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Travel stop free at rest 4",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "0.7 mm isolated translation before stops",
+      "pass": true,
+      "evidence": {
+        "max_rigid_overlap_mm3": 0.0
+      }
+    },
+    {
+      "name": "Fail-safe stops engage beyond normal travel",
+      "pass": true,
+      "evidence": {
+        "upper_mm3": 31.10176727053885,
+        "lower_mm3": 25.132741228718253,
+        "lateral_mm3": 6.437776516975933,
+        "nominal_upper_gap_mm": 0.9,
+        "nominal_lower_gap_mm": 1,
+        "nominal_radial_gap_mm": 1,
+        "washer_capture_overlap_at_zero_mm": 1.2999999999999998
+      }
+    },
+    {
+      "name": "Sleeve sets compression",
+      "pass": true,
+      "evidence": {
+        "free_bushing_height": 12,
+        "clamped_height": 11.4,
+        "flange_squeeze_each_mm": 0.3
+      }
+    },
+    {
+      "name": "Clamp upper vs lower",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Clamp closing gap",
+      "pass": true,
+      "evidence": {
+        "assumed_assembled_gap_mm": 2.0,
+        "liner_radial_interference_mm": 0.19999999999999996,
+        "bar_diameter_assumed_mm": 22.2,
+        "straight_width_required_mm": 40.0
+      }
+    },
+    {
+      "name": "Positive specified metal engagement",
+      "pass": true,
+      "evidence": {
+        "case_M3": 2.4,
+        "tray_M2.5": 2.0,
+        "board_assumed_M3": 3.0,
+        "cap_M2.5": 2.0,
+        "thumb_M4": 3.2,
+        "isolation_M5": 4.0,
+        "clamp_M5": 4.0,
+        "stop_M3": 2.4
+      }
+    },
+    {
+      "name": "Cap driver x=-12",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Cap driver x=12",
+      "pass": true,
+      "evidence": {
+        "intersection_mm3": 0.0
+      }
+    },
+    {
+      "name": "Continuous single-piece seal paths",
+      "pass": true,
+      "evidence": {
+        "seam_area_mm2": 694.3221171073282,
+        "adhesive_area_mm2": 471.66522113490714,
+        "seam_nominal_width_mm": 2.4,
+        "adhesive_nominal_width_mm": 2.0
+      }
+    },
+    {
+      "name": "Window to native touch gap",
+      "pass": true,
+      "evidence": {
+        "gap_mm": 0.1999999999999993,
+        "added_window_mm": 0.5,
+        "touch": "UNVERIFIED physical test required"
+      }
+    },
+    {
+      "name": "Original preserved MiniNav-Frame-with-button.stl",
+      "pass": true,
+      "evidence": "81ea3e4ac43428d953742b317cc0462f1be3008bd1b2517be56fc48069834902"
+    },
+    {
+      "name": "Original preserved MiniNav-back-panel-with-strap-slits.stl",
+      "pass": true,
+      "evidence": "aa613461c9aa7788da97889b617161bbe09f407006efcf66ef158b8e5e236d27"
+    },
+    {
+      "name": "Measured local shell sections",
+      "pass": true,
+      "evidence": {
+        "rear_floor_mm": 3.0,
+        "tray_nut_floor_mm": 1.500000000000469,
+        "tongue_wall_mm": 1.5999999999998613,
+        "method": "BRep material in 0.02 mm square probes",
+        "scope": "three local sections, not a global minimum-wall analysis"
+      }
+    }
+  ],
+  "remaining_physical_tests": [
+    "Measure actual bar diameter / straight length / controls clearance",
+    "Identify board revision, factory pillar thread and usable thread depth",
+    "Measure cable housing, exposed metal and full insertion depth",
+    "Print clearance coupons and measure gasket compression",
+    "Touch response / glare / visibility with purchased window",
+    "Clamp grip, creep, temperature, vibration, fatigue and tether proof tests"
+  ],
+  "passed": 175,
+  "failed": 0,
+  "limitations": [
+    "No physical printing, fit, touch, sealing, strength, fatigue, vibration, thermal or ride tests.",
+    "Archived 2024 manufacturer geometry may differ from the user board; factory threads and cable nose remain assumptions.",
+    "Nominal compressed TPU is not a deformation simulation; smooth screw proxies do not prove tolerance or strength.",
+    "Motion checks combine sampled paths with continuous board component-box sweep; installed bike obstructions are unknown."
+  ]
+}
