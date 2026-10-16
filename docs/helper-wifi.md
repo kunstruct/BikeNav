@@ -4,6 +4,8 @@ Firmware **1.2.0-helper-alpha1**, Android helper **0.1.0-alpha1**.
 
 This experiment keeps the ESP32 as the Wi-Fi access point and uses an Android app to request a local-only connection. It aims to preserve cellular internet without running the phone hotspot. **The user has reported a successful proof of concept on the Pixel 8 Pro / Android 17 setup. Battery savings and extended screen-off reliability remain unmeasured.** The existing Phone AP mode remains the tested fallback.
 
+The user confirmed on 2026-10-17 that this experimental firmware is currently in use. It is the proposed main-branch operating baseline; its alpha label and the unmeasured limits below still apply.
+
 ## Successful device proof of concept — 2026-10-16
 
 After installing the matched firmware and APK, the user reported: “The proof of concept works brilliantly.” This records user-reported functional success of the Helper WiFi approach: Android Auto over board-hosted Wi-Fi with cellular internet retained, without running the phone hotspot.
