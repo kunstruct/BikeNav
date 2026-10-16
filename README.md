@@ -6,6 +6,9 @@
 - [49-second concept video](docs/vision/mininav-intro.webm) · [Storyboard](docs/vision/storyboard.jpg) · [Editable renderer](docs/vision/render_intro.py). The film illustrates proposed companion features; it predates the expanded agent-platform direction.
 - [Reviewed enclosure comparison](docs/case/COMPARISON.md): both CAD designs, printable parts, assembly guides, and recorded geometry validation. Start with the recommended fit coupons; physical fit and road testing remain outstanding.
 
+- [Experimental helper setup and evidence](docs/helper-wifi.md) · [Android Auto startup research](docs/research/android-auto-startup.md). The helper is a separate alpha release; it is not included in this branch’s firmware or web installer.
+- [Main-branch integration review](docs/merge-readiness.md): proposed scope, verification, and remaining release gates.
+
 ## Navigation firmware
 
 A tiny Android Auto screen for your bike or car. MiniNav runs on the Waveshare ESP32-S3 2.8"
