@@ -1,0 +1,38 @@
+{
+  "review_date": "2026-10-16",
+  "original_session": "01a1416d-3544-73b1-ab58-e0034198b17c",
+  "independent_session": "01a1417e-9cb3-7e51-aa54-73c8d1b3c681",
+  "original_check_count": 33,
+  "independent_check_count": 175,
+  "failed_checks": 0,
+  "printable_stls": 45,
+  "physical_tests_performed": false,
+  "geometry_exports_validations_reference_measurements_render_exit_codes": {
+    "original": 0,
+    "independent": 0,
+    "common_review": 0
+  },
+  "artifact_sha256": {
+    "codex-work-models/reports/validation.json": "92115876b1ca196928b1984db77e43c8c63c3f533b0dac015082dde96230648f",
+    "codex-work-models/reports/export-inputs.json": "24ab96a13495fa0843d5bb58642371d29077eef984d162b52fdc9fe0980d69e5",
+    "assistant-models/validation/checks.json": "5b452f2c11de38779970190f3deddd27067f33678aa96eee90872cd36e5cc908",
+    "assistant-models/validation/export-inputs.json": "7d6671622161fab30369cf98a870900ca4fd1f7b1dc3957b2e565548443bd177",
+    "automation/review-evidence.json": "e79edacfe27dd9e4533edd522f31a3976ae87f424082a6a1ed61690dd5893530",
+    "codex-work-models/previews/assembled_compact.png": "9e759f81dce6e8cf4a1efd36884da8ddcb08028ea6a5dc752b222e7748df4838",
+    "codex-work-models/previews/assembled_sun.png": "225475edfa077f126fc3b7d1ece019687d9b93a3b3b3afd6b08b21c8dad39609",
+    "codex-work-models/previews/assembled_touring.png": "3d8d3eed3515da5049d66eee33866383fb60228079d44b70d23112d38bff3f5b",
+    "codex-work-models/previews/exploded_sun.png": "ef1f85ffe7804fc366b4d7ed58e371e4ae862a6c89c0d6191d704c9a7325a8de",
+    "codex-work-models/previews/isolation_mount.png": "581249967a1e2e175aabf7c91a29b0a3595f236c1af7e7a63734a9a84e86ed7a",
+    "codex-work-models/previews/rear_mount.png": "d89bedf35cf586255935248cd934aab3b58113a63966f1082bb12c61db1d79fd",
+    "codex-work-models/previews/section.png": "c57282d190c759d3e49f2e5a2754524a65abd515346641922340a65b0080b111",
+    "assistant-models/previews/assembly-front.png": "aa729c6cadaf79500893cc48164c704aed82efb0ce43d403dc43888e15a2dc16",
+    "assistant-models/previews/assembly-rear.png": "3a84f42fca922ee14b23209ca35198b1fb76bf5848193b1bf80f364bb9f57723",
+    "assistant-models/previews/bushing-detail.png": "aca393c46092def4f95f3edac47083f8a0bf393e20e953a08742ac23b775e2f6",
+    "assistant-models/previews/electronics.png": "b23d552190a02be64a689f544b53417aa9de6389e88208e544935cf1e97faea2",
+    "assistant-models/previews/exploded.png": "99a2c362f64a342217d07e933293c3ce87c0595222c3951d68eb9571499e86eb",
+    "assistant-models/previews/isolation-section.png": "f92e82c653497e9629462ac8d209844c54349a8ec07dd6790492ab0b1dddf9e9",
+    "assistant-models/previews/variants.png": "3d615e214c35127e51115b5bbf07143b16ddb2a18ed29290c5942a685bdee350",
+    "previews/comparison.png": "d03e855468f91a81f937c7b329433dcc73a722c66dd917dbb6c8ca51ba811b75",
+    "previews/variants-and-sections.png": "4bf20a10a9f08027dadbd647bb5438f0351de48a07683b040d5b73ea2c15dd32"
+  }
+}

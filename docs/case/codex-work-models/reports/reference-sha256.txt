@@ -1,0 +1,5 @@
+81ea3e4ac43428d953742b317cc0462f1be3008bd1b2517be56fc48069834902  docs/case/MiniNav-Frame-with-button.stl
+aa613461c9aa7788da97889b617161bbe09f407006efcf66ef158b8e5e236d27  docs/case/MiniNav-back-panel-with-strap-slits.stl
+3292041482d0bf24d9c0f3ccf9ee306ce637df57c73970c397bc6fcea42b4e36  docs/case/codex-work-models/reference/waveshare-2.8-2024.stp
+15195530aced221846fb3a1e2eaeff3542c899d1bf5d8fad083e5aeecedc4c62  docs/case/codex-work-models/reference/waveshare-2.8-structure.pdf
+8ec9ac21ffc8800bccda1a985d929b818db601272f791ebe63cea4d3b026b90e  docs/case/codex-work-models/reference/waveshare-2.8-structure.png

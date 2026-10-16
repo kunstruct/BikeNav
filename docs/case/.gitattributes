@@ -1,0 +1,6 @@
+# Preserve generated geometry byte-for-byte and keep source reviews readable.
+*.stl binary linguist-generated=true
+*.step binary linguist-generated=true
+*.stp binary linguist-vendored=true
+*.png binary
+*.pdf binary
