@@ -64,9 +64,9 @@ void app_toggle_bike(const char *why) {
 }
 
 void app_cycle_wifi(const char *why) {
-    g_app.wifi_mode = (g_app.wifi_mode + 1) % 3;
+    g_app.wifi_mode = (g_app.wifi_mode + 1) % 4;
     ESP_LOGI(TAG, "%s -> WiFi mode %d; restarting", why, g_app.wifi_mode);
-    if (!save_prefs()) { g_app.wifi_mode = (g_app.wifi_mode + 2) % 3; return; }
+    if (!save_prefs()) { g_app.wifi_mode = (g_app.wifi_mode + 3) % 4; return; }
     display_toast("WiFi saved. Restarting...");
     vTaskDelay(pdMS_TO_TICKS(400));
     esp_restart();
@@ -128,7 +128,7 @@ static void console_poll(void) {
             else if (!strcmp(line, "status")) {
                 ESP_LOGI(TAG, "stage %s, phone %s, error \"%s\"", stage_name(g_app.stage), g_app.phone_ip, g_app.error);
                 ESP_LOGI(TAG, "vehicle=%s wifi=%s", g_app.motorcycle ? "motorcycle" : "car",
-                         g_app.wifi_mode == 0 ? "board AP" : g_app.wifi_mode == 1 ? "phone hotspot" : "auto");
+                         g_app.wifi_mode == 0 ? "board AP" : g_app.wifi_mode == 1 ? "phone hotspot" : g_app.wifi_mode == 2 ? "auto" : "helper WiFi");
                 board_touch_diagnostics(false);
                 net_diagnostics();
             }
@@ -178,7 +178,7 @@ extern "C" void app_main(void) {
         if (nvs_get_u8(h, "touch", &v) == ESP_OK) g_app.touch_enabled = v;
         if (nvs_get_u8(h, "full", &v) == ESP_OK) g_app.full_screen = v;
         if (nvs_get_u8(h, "bike", &v) == ESP_OK) g_app.motorcycle = v != 0;
-        if (nvs_get_u8(h, "wifi_mode", &v) == ESP_OK && v <= 2) g_app.wifi_mode = v;
+        if (nvs_get_u8(h, "wifi_mode", &v) == ESP_OK && v <= 3) g_app.wifi_mode = v;
         nvs_close(h);
     }
     g_app.rotation = 1;

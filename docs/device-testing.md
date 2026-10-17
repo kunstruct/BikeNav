@@ -59,7 +59,8 @@ Adjust the port for your computer. No automatic erase is needed.
    disabled/re-enabled. Some phones may still need the developer server restarted.
 3. If cellular internet stops, choose **Phone AP** via the top-right label. This saves the mode
    and restarts the board. Enable the configured 2.4 GHz phone hotspot. In this mode the board's
-   AP is off. **Auto WiFi** enables both; the next tap returns to **Board WiFi**.
+   AP is off. **Auto WiFi** enables both; the next tap selects experimental **Helper WiFi**, then **Board WiFi**.
+   Helper WiFi requires the matching Android APK; see [helper testing](helper-wifi.md).
 4. `wifi` over serial cycles these same modes if screen input is unavailable.
 5. Compare phone battery drain over equal navigation durations and similar conditions. The
    board-hosted mode removes phone tethering, but the phone still renders Android Auto video;

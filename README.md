@@ -163,3 +163,9 @@ docs/               the guide website (GitHub Pages): web flasher (flash/), case
 - MiniNav is licensed under the GNU AGPL-3.0 (`LICENSE`).
 
 Not affiliated with Google. Android Auto is a trademark of Google LLC.
+
+## Experimental Wi-Fi helper
+
+The `fix/wifi-cellular-coexistence` branch adds **Helper WiFi** mode and a signed Android helper APK in the [1.2.0-helper-alpha1 prerelease](https://github.com/kunstruct/BikeNav/releases/tag/v1.2.0-helper-alpha1). This experiments with board-hosted local-only Wi-Fi while retaining cellular internet. The user reported a successful proof of concept on the Pixel 8 Pro / Android 17 setup on 2026-10-16. Battery savings, endurance and other-phone compatibility remain unmeasured. See [installation, diagnostics and build instructions](docs/helper-wifi.md).
+
+See the [complete helper development process and validation record](docs/helper-development-process.md) for the investigation, architecture, release process and successful device proof of concept.
