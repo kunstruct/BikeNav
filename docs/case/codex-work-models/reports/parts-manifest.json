@@ -1,0 +1,513 @@
+{
+  "front_compact": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Print rear rim down; support under bezel ledge and blind nut roofs.",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      3.5
+    ],
+    "print_bounds_mm": [
+      -45.0000001,
+      -37.0000001,
+      0.0,
+      45.0000001,
+      37.0000001,
+      6.000000100000001
+    ],
+    "stl_sha256": "c959472830c1ada6e214213a26222139edbc1a044a849e6b5ac9876ac93719c2",
+    "design_volume_mm3": 11442.004995521027
+  },
+  "front_sun": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Print rear rim down; support under bezel ledge and blind nut roofs.",
+    "print_translation": [
+      -0.0,
+      5.000000058430487e-08,
+      3.5
+    ],
+    "print_bounds_mm": [
+      -45.0000001,
+      -37.000000050000004,
+      0.0,
+      45.0000001,
+      37.00000005,
+      24.0
+    ],
+    "stl_sha256": "fabe5783d0de5a39fe57ef5115d26a86e568ade3d46b7f5d0d1233a5e819691b",
+    "design_volume_mm3": 16507.57343177194
+  },
+  "front_touring": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Print rear rim down; support under bezel ledge and blind nut roofs.",
+    "print_translation": [
+      -0.0,
+      5.000000058430487e-08,
+      3.5
+    ],
+    "print_bounds_mm": [
+      -45.0000001,
+      -37.000000050000004,
+      0.0,
+      45.0000001,
+      37.00000005,
+      31.0
+    ],
+    "stl_sha256": "68de59d53b6006d195ca0399a12ad0e5bb61bf94a6f87e5985ddc22a30999df1",
+    "design_volume_mm3": 18597.493431871342
+  },
+  "rear_shell": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Rail foot down; support exterior floor around rail. Keep cavity facing up.",
+    "print_translation": [
+      4.0,
+      -0.0,
+      25.5
+    ],
+    "print_bounds_mm": [
+      -49.0,
+      -37.0,
+      0.0,
+      49.0,
+      37.0,
+      24.0
+    ],
+    "stl_sha256": "79d7350efd0a85453d068ea85238a03d63136c00804934d7ba2fe606cda79f7c",
+    "design_volume_mm3": 52950.75745030761
+  },
+  "seam_gasket": {
+    "material": "TPU",
+    "quantity": 1,
+    "rotation": null,
+    "note": "1.2 mm free height; installed height 0.9 mm. Silicone sheet preferred for sealing.",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    "print_bounds_mm": [
+      -41.2,
+      -30.2,
+      0.0,
+      41.2,
+      30.2,
+      1.2
+    ],
+    "stl_sha256": "3da38f4d1b946bf663b7ef3cdc8c6dc481369ea6eb7f651bf68295746026fed3",
+    "design_volume_mm3": 521.560349475052
+  },
+  "floating_carrier": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Plate down; supports beneath cage and rail overhangs. Clear channel carefully.",
+    "print_translation": [
+      -0.0,
+      12.0,
+      -2.5
+    ],
+    "print_bounds_mm": [
+      -39.0,
+      -40.0,
+      0.0,
+      39.0,
+      40.0,
+      23.0
+    ],
+    "stl_sha256": "e12a95a504fd94ffe68f55b8b3cc62da9143241daddcae139dae6b4d4776d7b9",
+    "design_volume_mm3": 27150.781874536333
+  },
+  "cage_front": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": [
+      [
+        1,
+        0,
+        0
+      ],
+      90
+    ],
+    "note": "Rear face down.",
+    "print_translation": [
+      -0.0,
+      14.000000000000007,
+      55.0
+    ],
+    "print_bounds_mm": [
+      -17.0,
+      -11.5,
+      -1.0325074129013957e-15,
+      17.0,
+      11.500000000000002,
+      3.0000000000000027
+    ],
+    "stl_sha256": "2b39aa3c0ba7c0d53bb1acea19916a39b50897f34e4d09dc052432f741f23099",
+    "design_volume_mm3": 1434.3412278547783
+  },
+  "thumbwheel": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": [
+      [
+        1,
+        0,
+        0
+      ],
+      90
+    ],
+    "note": "Flange down; small support beneath flange transition as needed.",
+    "print_translation": [
+      -0.0,
+      12.500000000000007,
+      52.0
+    ],
+    "print_bounds_mm": [
+      -11.0,
+      -10.999999999999998,
+      -9.917375562748827e-16,
+      11.0,
+      11.000000000000002,
+      11.000000000000002
+    ],
+    "stl_sha256": "897676b848a10c800731fd97d688a8764b8d3d5f7dddef8da30dff710cc84342",
+    "design_volume_mm3": 2450.524581727273
+  },
+  "thumbwheel_cap": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": [
+      [
+        1,
+        0,
+        0
+      ],
+      90
+    ],
+    "note": "",
+    "print_translation": [
+      -0.0,
+      12.500000000000007,
+      54.0
+    ],
+    "print_bounds_mm": [
+      -9.0,
+      -9.0,
+      -9.992007221626409e-16,
+      9.0,
+      9.000000000000002,
+      2.000000000000001
+    ],
+    "stl_sha256": "cfc6c7c5e900eac84e45816ea8cea820b6f73a3ef9325e8925a17344290ebf4d",
+    "design_volume_mm3": 493.73270143817194
+  },
+  "bushing_half": {
+    "material": "TPU",
+    "quantity": 8,
+    "rotation": null,
+    "note": "Four pairs. Flange down. Free stack 8.4, sleeve limits installed stack to 8.0 mm.",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    "print_bounds_mm": [
+      -7.0,
+      -7.0,
+      0.0,
+      7.0,
+      7.0,
+      4.2
+    ],
+    "stl_sha256": "7107c55e351c3638642ee39d38f48fc47285b51d56706b312a1e3b758cbc2d2f",
+    "design_volume_mm3": 448.6759796003872
+  },
+  "clamp_upper": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": [
+      [
+        0,
+        1,
+        0
+      ],
+      90
+    ],
+    "note": "Bar axis vertical for circular bore; use supports for nut slots.",
+    "print_translation": [
+      -10.19999995,
+      -0.0,
+      16.0000001
+    ],
+    "print_bounds_mm": [
+      -9.700000050000002,
+      -22.9,
+      1.1686097468332243e-15,
+      9.700000050000002,
+      22.9,
+      32.0000002
+    ],
+    "stl_sha256": "1085823f954bdab660e7de5dd8394d9d1faa427362f7e70a9076f8bb6c38074c",
+    "design_volume_mm3": 10285.754631875052
+  },
+  "clamp_lower": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": [
+      [
+        0,
+        1,
+        0
+      ],
+      90
+    ],
+    "note": "Bar axis vertical; flat axial face on bed.",
+    "print_translation": [
+      9.2,
+      -0.0,
+      16.000000100000005
+    ],
+    "print_bounds_mm": [
+      -8.7000001,
+      -22.9,
+      2.734024214201673e-15,
+      8.7000001,
+      22.9,
+      32.00000020000001
+    ],
+    "stl_sha256": "7dfbab9c9bcd229be8f90c48940963dfd4e7d6b7513fac11cd5ea9f10e1ee7f8",
+    "design_volume_mm3": 9221.833383590036
+  },
+  "liner_half": {
+    "material": "TPU",
+    "quantity": 2,
+    "rotation": [
+      [
+        0,
+        1,
+        0
+      ],
+      90
+    ],
+    "note": "Bar axis vertical. Two identical halves, one rotated 180 degrees in assembly.",
+    "print_translation": [
+      -6.799999999999998,
+      -0.0,
+      17.5
+    ],
+    "print_bounds_mm": [
+      -6.300000000000005,
+      -13.090454537562858,
+      0.0,
+      6.300000000000005,
+      13.090454537562858,
+      35.0
+    ],
+    "stl_sha256": "4decadcab5ddcd8b8511fe80945c83424587387401f5d03929e19334491dc20f",
+    "design_volume_mm3": 1356.2271634150452
+  },
+  "angle_adapter_00": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Flat underside down; supports in four nut access recesses.",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    "print_bounds_mm": [
+      -39.0,
+      -28.0,
+      0.0,
+      39.0,
+      28.0,
+      9.0
+    ],
+    "stl_sha256": "411e3d1c354ec96771f6a2ed6b88a2d9ef433e56a41bd16028e8e5081e31fd63",
+    "design_volume_mm3": 26511.50641250246
+  },
+  "angle_adapter_20": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Flat underside down; supports in four nut access recesses.",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      2.042810365310288e-14
+    ],
+    "print_bounds_mm": [
+      -39.0,
+      -28.0,
+      0.0,
+      39.0,
+      28.0,
+      27.76773057257241
+    ],
+    "stl_sha256": "025002a72e037eaa89be9a67009341ed264f8de98f8102fc9037e7d96ca4b7d2",
+    "design_volume_mm3": 42914.600405407014
+  },
+  "angle_adapter_30": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Flat underside down; supports in four nut access recesses.",
+    "print_translation": [
+      -0.0,
+      -1.0658141036401503e-14,
+      -0.0
+    ],
+    "print_bounds_mm": [
+      -39.0,
+      -28.00000000000001,
+      0.0,
+      39.0,
+      28.000000000000007,
+      38.16580753730952
+    ],
+    "stl_sha256": "de5af75a593dd086db54dcd16138a0e66058a6d6371fec5bca8dbdb69095b134",
+    "design_volume_mm3": 50865.761357588235
+  },
+  "coupon_rail_male": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Tests full cross-section, shortened length.",
+    "print_translation": [
+      -8.881784197001252e-16,
+      8.881784197001252e-16,
+      -8.5
+    ],
+    "print_bounds_mm": [
+      -15.0,
+      -6.000000000000001,
+      -4.440892098500626e-16,
+      15.0,
+      6.000000000000001,
+      10.5
+    ],
+    "stl_sha256": "5488e144908fdbe1fef0b2218f3ee784c33a857180bee4bdaf948e2eae4ef00a",
+    "design_volume_mm3": 3156.0000000000005
+  },
+  "coupon_rail_female_0p2": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      -5.5
+    ],
+    "print_bounds_mm": [
+      -19.5,
+      -6.0,
+      0.0,
+      19.5,
+      6.0,
+      11.350000000000001
+    ],
+    "stl_sha256": "dccbbb2f899556e2a89546b7729d382961b52610bfac6c9353b6b9620df1dacb",
+    "design_volume_mm3": 2610.3600000000006
+  },
+  "coupon_rail_female_0p35": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "",
+    "print_translation": [
+      -0.0,
+      8.881784197001252e-16,
+      -5.5
+    ],
+    "print_bounds_mm": [
+      -19.5,
+      -6.000000000000001,
+      0.0,
+      19.5,
+      6.000000000000001,
+      11.350000000000003
+    ],
+    "stl_sha256": "dbdb0fa5bd764539e4aca0311d6df5d87e0fe6c611a4065c3b85ffdcdfa1d3a6",
+    "design_volume_mm3": 2524.3199999999997
+  },
+  "coupon_rail_female_0p5": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "",
+    "print_translation": [
+      -0.0,
+      8.881784197001252e-16,
+      -5.5
+    ],
+    "print_bounds_mm": [
+      -19.5,
+      -6.000000000000001,
+      0.0,
+      19.5,
+      6.000000000000001,
+      11.350000000000003
+    ],
+    "stl_sha256": "72fd99fcd3ff477025fafc0da2514839657dda675801c1f45fc8504a7a52aba5",
+    "design_volume_mm3": 2437.32
+  },
+  "coupon_usb_plug": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": [
+      [
+        1,
+        0,
+        0
+      ],
+      90
+    ],
+    "note": "",
+    "print_translation": [
+      -0.0,
+      8.0,
+      1.5
+    ],
+    "print_bounds_mm": [
+      -12.0,
+      -8.0,
+      0.0,
+      12.0,
+      8.0,
+      3.0000000000000018
+    ],
+    "stl_sha256": "3b66f3fa0759ebf8312d260419bfe03b6692c015d6d8cfb9206a807cdfcd2f0c",
+    "design_volume_mm3": 770.5752220392303
+  },
+  "coupon_holes_insert": {
+    "material": "rigid",
+    "quantity": 1,
+    "rotation": null,
+    "note": "Left to right: 3.4 bolt, 5.6 insert, 9.0 grommet hole. Verify insert supplier.",
+    "print_translation": [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    "print_bounds_mm": [
+      -19.0,
+      -9.0,
+      0.0,
+      19.0,
+      9.0,
+      5.0
+    ],
+    "stl_sha256": "a3dbe70f6405eb41dd28db2329cb6114bbd551aed1c597e55864cd78a99dc00d",
+    "design_volume_mm3": 2933.367297958941
+  }
+}
