@@ -19,3 +19,11 @@ __pycache__/
 # Captures
 *.log
 dump.h264
+
+# Android helper build output and private signing material
+android-helper/.gradle/
+android-helper/**/build/
+android-helper/local.properties
+*.jks
+*.keystore
+release-artifacts/

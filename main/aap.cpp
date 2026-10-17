@@ -34,6 +34,7 @@
 #include "app.h"
 #include "pb.h"
 #include "socket_write.h"
+#include "helper_transport.h"
 #include "aap_cert.h"
 
 static const char *TAG = "aap";
@@ -981,6 +982,52 @@ static bool connect_phone(const char *ip) {
     return true;
 }
 
+// Helper owns the local-only Android WiFi network. It dials this listener and
+// forwards the phone's loopback headunit server without changing AAP/TLS bytes.
+// Only enabled in the explicitly selected Helper WiFi mode; one WPA2 AP client.
+static bool accept_helper(const char *ip) {
+    int listener = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (listener < 0) return false;
+    int one = 1;
+    setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &one, sizeof one);
+    sockaddr_in address = {};
+    address.sin_family = AF_INET;
+    address.sin_port = htons(5278);
+    address.sin_addr.s_addr = htonl(INADDR_ANY);
+    if (bind(listener, (sockaddr *)&address, sizeof address) || listen(listener, 1)) {
+        ESP_LOGE(TAG, "helper listener failed: %d", errno);
+        close(listener);
+        return false;
+    }
+    fd_set ready;
+    FD_ZERO(&ready); FD_SET(listener, &ready);
+    timeval wait = {1, 0};
+    int available = select(listener + 1, &ready, nullptr, nullptr, &wait);
+    sockaddr_in peer = {}; socklen_t peer_len = sizeof peer;
+    int s = available > 0 ? accept(listener, (sockaddr *)&peer, &peer_len) : -1;
+    close(listener);
+    if (s < 0) return false;
+    if (peer.sin_addr.s_addr != inet_addr(ip) || !net_link_valid(s_link_generation)) {
+        close(s); return false;
+    }
+    timeval timeout = {1, 0};
+    setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof timeout);
+    setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof timeout);
+    setsockopt(s, IPPROTO_TCP, TCP_NODELAY, &one, sizeof one);
+    setsockopt(s, SOL_SOCKET, SO_KEEPALIVE, &one, sizeof one);
+    // Bounded incremental read: a partial/malformed greeting must not stall the
+    // protocol task or consume the first bytes of the Android Auto handshake.
+    if (!helper_read_greeting(s, 5000000, [] { return esp_timer_get_time(); },
+            [] { esp_task_wdt_reset(); vTaskDelay(pdMS_TO_TICKS(10)); },
+            [] { return net_link_valid(s_link_generation); })) {
+        ESP_LOGW(TAG, "helper greeting missing or invalid");
+        close(s); return false;
+    }
+    s_sock = s;
+    ESP_LOGI(TAG, "helper relay connected from %s", ip);
+    return true;
+}
+
 static void aap_task(void *) {
     esp_task_wdt_add(NULL);
     char ip[16];
@@ -1010,9 +1057,9 @@ static void aap_task(void *) {
             continue;
         }
         if (g_app.stage < STAGE_PHONE || g_app.stage > STAGE_PHONE) app_set_stage(STAGE_PHONE);
-        ESP_LOGI(TAG, "connecting to %s:%d", ip, CONFIG_AAM_PHONE_PORT);
+        if (g_app.wifi_mode != 3) ESP_LOGI(TAG, "connecting to %s:%d", ip, CONFIG_AAM_PHONE_PORT);
         net_set_streaming(true);
-        if (connect_phone(ip)) {
+        if (g_app.wifi_mode == 3 ? accept_helper(ip) : connect_phone(ip)) {
             if (!net_link_valid(s_link_generation)) {
                 close_socket();
                 net_set_streaming(false);
@@ -1033,7 +1080,7 @@ static void aap_task(void *) {
             app_set_stage(STAGE_PHONE);
         }
         net_set_streaming(false);
-        int wait_ms = s_restart ? 300 : 3000;
+        int wait_ms = s_restart ? 300 : g_app.wifi_mode == 3 ? 100 : 3000;
         s_restart = false;
         if (silent >= 3) {
             app_set_error("Phone stuck: Stop + Start headunit server");

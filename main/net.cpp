@@ -4,6 +4,7 @@
 //  - Phone hotspot: the board joins the phone's hotspot "MiniNavHotspot" as a station and talks
 //    to the headunit server at the hotspot's gateway address. The phone keeps its internet.
 // Auto mode enables both; the phone hotspot wins when both are up.
+// Helper WiFi hosts the same AP but waits for the Android helper on TCP 5278.
 #include <string.h>
 #include <atomic>
 #include "freertos/FreeRTOS.h"
@@ -225,7 +226,7 @@ static void hotspot_task(void *) {
 void net_start(void) {
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
-    wifi_mode_t mode = g_app.wifi_mode == 0 ? WIFI_MODE_AP : g_app.wifi_mode == 1 ? WIFI_MODE_STA : WIFI_MODE_APSTA;
+    wifi_mode_t mode = (g_app.wifi_mode == 0 || g_app.wifi_mode == 3) ? WIFI_MODE_AP : g_app.wifi_mode == 1 ? WIFI_MODE_STA : WIFI_MODE_APSTA;
     esp_netif_t *ap_netif = mode != WIFI_MODE_STA ? esp_netif_create_default_wifi_ap() : nullptr;
     if (mode != WIFI_MODE_AP) configASSERT(esp_netif_create_default_wifi_sta());
     // Hand out an address only: no gateway, no DNS. With a gateway the phone sends its
@@ -276,7 +277,7 @@ void net_start(void) {
     ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_NONE));
     s_started = true;
     net_set_streaming(false);
-    ESP_LOGI(TAG, "WiFi mode: %s", mode == WIFI_MODE_AP ? "Board WiFi (phone hotspot not required)" :
+    ESP_LOGI(TAG, "WiFi mode: %s", g_app.wifi_mode == 3 ? "Helper WiFi (Android relay required)" : mode == WIFI_MODE_AP ? "Board WiFi (phone hotspot not required)" :
              mode == WIFI_MODE_STA ? "Phone hotspot" : "Automatic AP + phone hotspot");
     app_set_stage(STAGE_AP);
     if (mode != WIFI_MODE_AP) {

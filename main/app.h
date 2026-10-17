@@ -36,7 +36,7 @@ typedef struct {
     volatile bool touch_enabled;    // touch goes to Android Auto (setting, saved)
     volatile bool full_screen;      // hide Android Auto's app rail (setting, saved; needs touch off)
     bool motorcycle;               // saved vehicle identity, defaults to motorcycle
-    int wifi_mode;                 // 0 board AP, 1 phone hotspot, 2 both
+    int wifi_mode;                 // 0 board AP, 1 phone hotspot, 2 both, 3 helper relay
     volatile bool status_dirty;     // status screen needs a redraw
     volatile int rotation;          // LovyanGFX rotation, 1 or 3 (landscape)
     char phone_ip[16];
