@@ -1,0 +1,9 @@
+
+com.kunstruct.ridetracker.EnduranceReplayCheck:.
+com.kunstruct.ridetracker.LiveMapCheck:.
+Test results for InstrumentationTestRunner=..
+Time: 13.795
+
+OK (2 tests)
+
+

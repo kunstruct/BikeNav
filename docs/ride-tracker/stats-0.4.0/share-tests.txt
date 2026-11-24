@@ -1,0 +1,8 @@
+
+com.kunstruct.ridetracker.ShareFlowTest:..
+Test results for InstrumentationTestRunner=..
+Time: 53.33
+
+OK (2 tests)
+
+

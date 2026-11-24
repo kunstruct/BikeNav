@@ -1,0 +1,8 @@
+
+com.kunstruct.ridetracker.LiveMapCheck:.
+Test results for InstrumentationTestRunner=.
+Time: 3.089
+
+OK (1 test)
+
+

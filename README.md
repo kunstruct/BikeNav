@@ -1,5 +1,9 @@
 # MiniNav
 
+## Phone-only motorcycle ride tracker
+
+The standalone [Ride Tracker Android app](android-tracker/README.md) records GPS and acceleration locally on a Pixel, independently of MiniNav hardware. It includes raw-data export, a route preview and ten ride-card/transparent-overlay designs with optional street maps in four colors and optional start/finish names. Ride statistics exclude confirmed long breaks from ride time and average speed; raw recording continues throughout. Build with `sh tools/build_tracker.sh`; the APK is written to `release-artifacts/RideTracker.apk`. See its README for recording, recovery and validation limits.
+
 ## Project design and vision
 
 - [Companion platform vision](docs/vision/VISION.md): ride and desk modes, USB-connected PC/phone integrations, a local bridge with optional cloud sync, and an open-source agent integration direction.

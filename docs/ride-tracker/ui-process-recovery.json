@@ -1,0 +1,21 @@
+{
+  "test": "UI process SIGKILL while recorder remains running",
+  "before": [
+    29,
+    852,
+    34175
+  ],
+  "after": [
+    29,
+    1111,
+    44571
+  ],
+  "recorder_pid_unchanged": true,
+  "passed": true,
+  "notification_stop_saved": true,
+  "final_counts": {
+    "gps": 109,
+    "raw": 3912,
+    "linear": 3911
+  }
+}

@@ -1,0 +1,106 @@
+
+com.kunstruct.ridetracker.CardLabelsTest:
+Error in testBlankLongAndUnicodeNames:
+java.lang.ExceptionInInitializerError
+	at com.kunstruct.ridetracker.CardLabelsTest.testBlankLongAndUnicodeNames(CardLabelsTest.java:12)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:195)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:181)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:563)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+Caused by: java.util.regex.PatternSyntaxException: Syntax error in regexp pattern near index 3
+(?U)[\p{Cntrl}\s]+
+   ^
+	at com.android.icu.util.regex.PatternNative.compileImpl(Native Method)
+	at com.android.icu.util.regex.PatternNative.<init>(PatternNative.java:53)
+	at com.android.icu.util.regex.PatternNative.create(PatternNative.java:49)
+	at java.util.regex.Pattern.compile(Pattern.java:3666)
+	at java.util.regex.Pattern.<init>(Pattern.java:1552)
+	at java.util.regex.Pattern.compile(Pattern.java:915)
+	at java.lang.String.replaceAll(String.java:3325)
+	at com.kunstruct.ridetracker.CardLabels.clean(CardLabels.java:15)
+	at com.kunstruct.ridetracker.CardLabels.<init>(CardLabels.java:12)
+	at com.kunstruct.ridetracker.CardLabels.<clinit>(CardLabels.java:9)
+	... 12 more
+
+Error in testNamedMapsAlignAcrossStylesAndKeepTransparentOutsidePanel:
+java.lang.NoClassDefFoundError: com.kunstruct.ridetracker.CardLabels
+	at com.kunstruct.ridetracker.CardLabelsTest.testNamedMapsAlignAcrossStylesAndKeepTransparentOutsidePanel(CardLabelsTest.java:46)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:195)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:181)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:563)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+Caused by: java.lang.ExceptionInInitializerError
+	at com.kunstruct.ridetracker.CardLabelsTest.testBlankLongAndUnicodeNames(CardLabelsTest.java:12)
+	... 11 more
+Caused by: java.util.regex.PatternSyntaxException: Syntax error in regexp pattern near index 3
+(?U)[\p{Cntrl}\s]+
+   ^
+	at com.android.icu.util.regex.PatternNative.compileImpl(Native Method)
+	at com.android.icu.util.regex.PatternNative.<init>(PatternNative.java:53)
+	at com.android.icu.util.regex.PatternNative.create(PatternNative.java:49)
+	at java.util.regex.Pattern.compile(Pattern.java:3666)
+	at java.util.regex.Pattern.<init>(Pattern.java:1552)
+	at java.util.regex.Pattern.compile(Pattern.java:915)
+	at java.lang.String.replaceAll(String.java:3325)
+	at com.kunstruct.ridetracker.CardLabels.clean(CardLabels.java:15)
+	at com.kunstruct.ridetracker.CardLabels.<init>(CardLabels.java:12)
+	at com.kunstruct.ridetracker.CardLabels.<clinit>(CardLabels.java:9)
+	... 12 more
+
+Error in testNamesPersistPerRideAndClearIndependently:
+java.lang.NoClassDefFoundError: com.kunstruct.ridetracker.CardLabels
+	at com.kunstruct.ridetracker.CardLabelsTest.testNamesPersistPerRideAndClearIndependently(CardLabelsTest.java:26)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:195)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:181)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:563)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+Caused by: java.lang.ExceptionInInitializerError
+	at com.kunstruct.ridetracker.CardLabelsTest.testBlankLongAndUnicodeNames(CardLabelsTest.java:12)
+	... 11 more
+Caused by: java.util.regex.PatternSyntaxException: Syntax error in regexp pattern near index 3
+(?U)[\p{Cntrl}\s]+
+   ^
+	at com.android.icu.util.regex.PatternNative.compileImpl(Native Method)
+	at com.android.icu.util.regex.PatternNative.<init>(PatternNative.java:53)
+	at com.android.icu.util.regex.PatternNative.create(PatternNative.java:49)
+	at java.util.regex.Pattern.compile(Pattern.java:3666)
+	at java.util.regex.Pattern.<init>(Pattern.java:1552)
+	at java.util.regex.Pattern.compile(Pattern.java:915)
+	at java.lang.String.replaceAll(String.java:3325)
+	at com.kunstruct.ridetracker.CardLabels.clean(CardLabels.java:15)
+	at com.kunstruct.ridetracker.CardLabels.<init>(CardLabels.java:12)
+	at com.kunstruct.ridetracker.CardLabels.<clinit>(CardLabels.java:9)
+	... 12 more
+
+Error in testOptionalNameRowsStayInsideEveryRoutePanel:
+java.lang.NoClassDefFoundError: com.kunstruct.ridetracker.CardLabels
+	at com.kunstruct.ridetracker.CardLabelsTest.testOptionalNameRowsStayInsideEveryRoutePanel(CardLabelsTest.java:30)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:195)
+	at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:181)
+	at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:563)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2637)
+Caused by: java.lang.ExceptionInInitializerError
+	at com.kunstruct.ridetracker.CardLabelsTest.testBlankLongAndUnicodeNames(CardLabelsTest.java:12)
+	... 11 more
+Caused by: java.util.regex.PatternSyntaxException: Syntax error in regexp pattern near index 3
+(?U)[\p{Cntrl}\s]+
+   ^
+	at com.android.icu.util.regex.PatternNative.compileImpl(Native Method)
+	at com.android.icu.util.regex.PatternNative.<init>(PatternNative.java:53)
+	at com.android.icu.util.regex.PatternNative.create(PatternNative.java:49)
+	at java.util.regex.Pattern.compile(Pattern.java:3666)
+	at java.util.regex.Pattern.<init>(Pattern.java:1552)
+	at java.util.regex.Pattern.compile(Pattern.java:915)
+	at java.lang.String.replaceAll(String.java:3325)
+	at com.kunstruct.ridetracker.CardLabels.clean(CardLabels.java:15)
+	at com.kunstruct.ridetracker.CardLabels.<init>(CardLabels.java:12)
+	at com.kunstruct.ridetracker.CardLabels.<clinit>(CardLabels.java:9)
+	... 12 more
+
+Test results for InstrumentationTestRunner=.E.E.E.E
+Time: 0.532
+
+FAILURES!!!
+Tests run: 4,  Failures: 0,  Errors: 4
+
+

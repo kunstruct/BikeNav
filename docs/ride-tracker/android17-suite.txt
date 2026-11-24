@@ -1,0 +1,10 @@
+
+com.kunstruct.ridetracker.StorageTest:............
+com.kunstruct.ridetracker.RecorderTest:.....
+com.kunstruct.ridetracker.ShareFlowTest:.
+Test results for InstrumentationTestRunner=..................
+Time: 164.015
+
+OK (18 tests)
+
+

@@ -6,11 +6,12 @@ version and signing certificate before publishing. Their project-managed version
 codes are preserved; Android updates require intentional version progression
 and do not accept downgrades. CI has not yet run these jobs.
 
-Before activation, review and commit `.github/workflows/android-release.yml`,
-`scripts/fenfa_publish.py`, `scripts/verify_apk.py`, this document and the
-focused test. The tracker source and build script are currently uncommitted;
-they must be reviewed and committed before CI can build them, and main needs
-both apps and workflow changes merged before its pipeline can work. Preserve
+The publishing workflow, its verification/publishing scripts and the tracker
+source/build helper are included on `drakknightmc/strava-biking`. Main needs
+both apps and workflow changes merged before its pipeline can work. Follow
+the release source-control rules in [AGENTS.md](../AGENTS.md): validate,
+commit and push release source before delivery/publication, then check CI.
+Preserve
 the current debug keystore for the tracker and release keystore for the helper;
 the workflow verifies their known certificate fingerprints before publication.
 

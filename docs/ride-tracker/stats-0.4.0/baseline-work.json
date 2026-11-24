@@ -1,0 +1,11 @@
+{
+  "version": "0.3.0",
+  "duration_ms": 60018,
+  "recorder_cpu_ticks": 21,
+  "notification_enqueues": 12,
+  "notification_updates": 12,
+  "gps_samples": 60,
+  "raw_samples": 1482,
+  "linear_samples": 1482,
+  "checkpoint_age_ms": 889
+}

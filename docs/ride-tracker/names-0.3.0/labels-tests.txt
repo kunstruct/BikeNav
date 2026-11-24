@@ -1,0 +1,9 @@
+
+com.kunstruct.ridetracker.CardLabelsTest:....
+com.kunstruct.ridetracker.ShareFlowTest:..
+Test results for InstrumentationTestRunner=......
+Time: 66.398
+
+OK (6 tests)
+
+

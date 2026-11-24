@@ -1,0 +1,7 @@
+<resources>
+    <item name="start_ride" type="id" />
+    <item name="stop_ride" type="id" />
+    <item name="card_start_name" type="id" />
+    <item name="card_finish_name" type="id" />
+    <item name="card_preview" type="id" />
+</resources>

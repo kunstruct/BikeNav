@@ -1,0 +1,8 @@
+{
+  "ride": "29|recording|588|20226|20226|808899",
+  "gaps": "accel|20226|0.04\ngps|588|2.87915989\nlinear|20226|0.04",
+  "integrity": "ok",
+  "upgrade_before": "28|1663|22985|22959",
+  "upgrade_after": "28|1663|22985|22959",
+  "note": "Manual live-map recording. Instrumentation started before the pending stop confirmation was accepted; this intentionally test-only session was interrupted by test launch, not a map error."
+}

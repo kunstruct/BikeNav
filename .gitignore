@@ -27,3 +27,6 @@ android-helper/local.properties
 *.jks
 *.keystore
 release-artifacts/
+android-tracker/.gradle/
+android-tracker/**/build/
+android-tracker/local.properties

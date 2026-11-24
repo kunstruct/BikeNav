@@ -1,0 +1,13 @@
+{
+  "android": "17",
+  "sdk": 37,
+  "ride_id": 19,
+  "elapsed_ms": 602448,
+  "injected_gps": 600,
+  "gps_samples": 600,
+  "raw_motion_samples": 15086,
+  "linear_motion_samples": 15085,
+  "gps_max_gap_seconds": 1.003511868,
+  "accel_max_gap_seconds": 0.04,
+  "linear_max_gap_seconds": 0.04
+}

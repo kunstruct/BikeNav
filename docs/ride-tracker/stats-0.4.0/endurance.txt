@@ -1,0 +1,8 @@
+
+com.kunstruct.ridetracker.EnduranceTest:.
+Test results for InstrumentationTestRunner=.
+Time: 611.978
+
+OK (1 test)
+
+
