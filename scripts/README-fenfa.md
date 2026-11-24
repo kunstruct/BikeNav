@@ -1,10 +1,11 @@
-# Android publishing preparation
+# Android publishing
 
 The independent tracker and helper jobs build and lint on Ubuntu 24.04 with
 JDK 17 and Android SDK/build-tools 35, then inspect the actual APK package,
 version and signing certificate before publishing. Their project-managed version
 codes are preserved; Android updates require intentional version progression
-and do not accept downgrades. CI has not yet run these jobs.
+and do not accept downgrades. Check the Actions run for the pushed commit;
+a successful local build alone does not confirm CI publication.
 
 The publishing workflow, its verification/publishing scripts and the tracker
 source/build helper are included on `drakknightmc/strava-biking`. Main needs
